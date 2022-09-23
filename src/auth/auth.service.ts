@@ -1,56 +1,51 @@
 import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { getRepository, Repository, In } from 'typeorm';
+import { UserIdentity } from '../user-identities/entities/user-identities.entity';
 import { JwtService } from '@nestjs/jwt';
-import { UserIdentity } from 'src/users/entities/user.entity';
-import { Cache } from 'cache-manager';
 import { AuthConstant, AuthConstantType } from './constant';
-import { Repository } from 'typeorm';
+import { generateSha512 } from 'src/utility/string-util';
+import { ConfigService } from '@nestjs/config';
+import { Cache } from 'cache-manager';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LoginActivity } from './entitites/login-activities.entity';
+import { LoginActivityDto } from './dto/login-activity.dto';
+import { UserRepository } from '../user-identities/repositories/user-repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
+    private readonly config: ConfigService,
+    @InjectRepository(UserIdentity)
+    private userIdentityRepository: Repository<UserIdentity>,
+    @InjectRepository(LoginActivity)
+    private loginActivityRepository: Repository<LoginActivity>,
+    private userRepository: UserRepository,
   ) {}
+
   async validateUser(
     loginId: string,
     password: string,
   ): Promise<[AuthConstantType | null, UserIdentity | null]> {
-    let resultAuth = await Repository(UserIdentity).findOne({
+    let resultAuth = await getRepository(UserIdentity).findOne({
       where: { login_id: loginId },
     });
 
-    if (!resultAuth) {
-      resultAuth = await getRepository(UserIdentity).findOne({
-        where: { phone_number: loginId },
-      });
-      // if (!resultAuth) {
-      //   return [AuthConstant.nohp_not_found, null];
-      // }
-    }
     if (resultAuth) {
-      const participant =
-        await this.participantRepository.findStatusActivePreregisDeceased(
+      const user =
+        await this.userRepository.findStatusActivePreregisDeceased(
           resultAuth.reference_id,
         );
-      if (participant) {
-        if (participant.status == 'DECEASED') {
-          const beneficiary = await this.beneficiaryRepository.findStatusActiveByParticipantId(
-            participant.id
-          ); 
-
-          if (!beneficiary) {
-            return [AuthConstant.user_not_found, null]
-          };
-        }
-
+        
+      if (user) {
         const matched = await this.validatePassword(
           password,
           resultAuth.password,
         );
+
         if (matched) {
-          resultAuth['status'] = participant.status.toLowerCase();
+          resultAuth['status'] = user.status.toLowerCase();
           return [null, resultAuth];
         }
 
@@ -60,11 +55,12 @@ export class AuthService {
 
     return [AuthConstant.user_not_found, null];
   }
+
   async login(user: UserIdentity) {
     const payload = {
       deviceId: user.device_id,
       email: user.email,
-      userId: user.user_id,
+      userId: user.reference_id,
       phoneNumber: user.phone_number,
       recordId: user.record_id,
     };
@@ -86,27 +82,83 @@ export class AuthService {
     return result;
   }
 
+  async compareWithPreviousToken(token: string) {
+    const result = await this.cacheManager.get(token);
+    if (result) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async getToken(userId: string) {
+    const data = await this.userIdentityRepository.findOne({
+      where: { reference_id: userId },
+    });
+
+    return { device_id: data.device_id, fcm_token_id: data.fcm_token_id };
+  }
+
+  async putToken(userId: string, body: any) {
+    const data = await this.userIdentityRepository.findOne({
+      where: { reference_id: userId },
+    });
+    const fcmData = data.fcm_token_id || [];
+    if (fcmData) {
+      if (!fcmData.includes(body.fcm_token_id)) {
+        fcmData.push(body.fcm_token_id);
+      }
+    } else {
+      fcmData.push(body.fcm_token_id);
+    }
+    data.device_id = body.device_id;
+    data.fcm_token_id = fcmData;
+    return this.userIdentityRepository.save(data);
+  }
+
+  private validatePassword(password: string, storedHash: string) {
+    const salt = this.config.get<string>('secretKey');
+    const value = generateSha512(password, salt);
+    if (value === storedHash) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  verifyJwt(token: string) {
+    try {
+      return this.jwtService.verify(token);
+    } catch (err) {
+      return null;
+    }
+  }
+
   private generateToken(payload) {
     return this.jwtService.sign(payload);
   }
 
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  generateTokenFor10Mins(payload) {
+    return this.jwtService.sign(payload, { expiresIn: '10m' });
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async postActivity(body: LoginActivityDto) {
+    const activity = new LoginActivity();
+    activity.login_id = body.login_id;
+    activity.device_id = body.device_id;
+    activity.longitude_area = body.longitude_area;
+    activity.latitude_area = body.latitude_area;
+    activity.phone_number = body.phone_number;
+    activity.platform = body.platform;
+    activity.platform_os = body.platform_os;
+    return this.loginActivityRepository.insert(activity);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+  async getIdentityByUserId(id: string) {
+    const data = await this.userIdentityRepository.findOne({
+      where: { reference_id: id },
+    });
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    return data;
   }
 }

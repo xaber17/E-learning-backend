@@ -1,19 +1,32 @@
-import { Module, CacheModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TerminusModule } from '@nestjs/terminus';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { OtpModule } from './otp/otp.module';
+import { Connection } from 'typeorm';
+import appConfig from './app.config';
+import { UserIdentitiesModule } from './user-identities/user-identities.module';
+import { ForgotPasswordModule } from './forgot-password/forgot-password.module';
 import * as redisStore from 'cache-manager-ioredis';
-import { LoggerModule } from 'nestjs-pino';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { LoggerModule } from 'nestjs-pino';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
+    ConfigModule.forRoot({
+      envFilePath: [
+        '.env',
+        '.env.staging',
+        '.env.development.local',
+        '.env.development',
+      ],
+      load: [appConfig],
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
         const { config } = await import('./orm.config');
@@ -33,15 +46,6 @@ import { UsersModule } from './users/users.module';
       },
       inject: [ConfigService],
     }),
-    LoggerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        return {
-          pinoHttp: { level: 'info' }
-        };
-      }
-    }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -54,8 +58,25 @@ import { UsersModule } from './users/users.module';
       }),
       inject: [ConfigService],
     }),
+    TerminusModule,
+    UserIdentitiesModule,
+    AuthModule,
+    OtpModule,
+    ForgotPasswordModule,
+    RegistrationModule,
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        return {
+          pinoHttp: { level: 'info' }
+        };
+      }
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) {}
+}

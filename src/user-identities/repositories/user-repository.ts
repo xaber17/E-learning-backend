@@ -1,8 +1,8 @@
 import { EntityRepository, In, Repository } from "typeorm";
-import { UserIdentity } from "../entities/user.entity";
+import { UsersEntity } from "../entities/users.entity";
 
-@EntityRepository(UserIdentity)
-export class ParticipantRepository extends Repository<UserIdentity> {
+@EntityRepository(UsersEntity)
+export class UserRepository extends Repository<UsersEntity> {
   findStatusActive(id: number) {
     return this.findOne({
       where: { id, status: In(['active', 'ACTIVE'])}
