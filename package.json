@@ -43,6 +43,7 @@
     "elastic-apm-node": "^3.29.0",
     "express-basic-auth": "^1.2.0",
     "fastify-swagger": "^4.12.4",
+    "ioredis": "^5.2.3",
     "jsonwebtoken": "^8.5.1",
     "kafkajs": "^1.15.0",
     "lodash": "^4.17.21",

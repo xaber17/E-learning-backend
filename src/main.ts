@@ -12,7 +12,7 @@ import { HttpExceptionFilter } from './utility/filter/http-exception.filter';
 import { BaseResponseInterceptor } from './utility/interceptor/base-response.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { ApiEndpointGuard } from './auth/guard/api-endpoint.guard';
-// import { Logger } from 'nestjs-pino';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const PORT = 3002;
@@ -24,9 +24,8 @@ async function bootstrap() {
       genReqId: () => uuidv4(),
     }),
   );
-
+  app.useLogger(app.get(Logger));
   const appConfig = app.get(ConfigService);
-
   app.enableCors({ origin: '*' });
   app.setGlobalPrefix(basePath);
   app.useGlobalInterceptors(new BaseResponseInterceptor());
