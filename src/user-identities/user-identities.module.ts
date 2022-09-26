@@ -6,17 +6,15 @@ import { UserIdentity } from './entities/user-identities.entity';
 import { UsersEntity } from './entities/users.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
-import { UserRepository } from './repositories/user-repository';
 
 @Module({
   imports: [
     ConfigModule,
+    AuthModule,
     TypeOrmModule.forFeature([
       UserIdentity,
       UsersEntity,
-      UserRepository,
     ]),
-    AuthModule,
   ],
   controllers: [UserIdentitiesController],
   providers: [UserIdentitiesService],

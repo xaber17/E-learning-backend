@@ -45,7 +45,6 @@
     "fastify-swagger": "^4.12.4",
     "ioredis": "^5.2.3",
     "jsonwebtoken": "^8.5.1",
-    "kafkajs": "^1.15.0",
     "lodash": "^4.17.21",
     "nestjs-pino": "^2.4.0",
     "nestjs-throttler-storage-redis": "^0.1.18",

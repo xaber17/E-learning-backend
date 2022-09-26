@@ -8,9 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LoginActivity } from './entitites/login-activities.entity';
-import UsersEntity from 'src/user-identities/entities/users.entity';
-import { UserRepository } from '../user-identities/repositories/user-repository';
+import { LoginActivity } from './entities/login-activities.entity';
+import { UsersEntity } from 'src/user-identities/entities/users.entity';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import { UserRepository } from '../user-identities/repositories/user-repository'
       UserIdentity,
       LoginActivity,
       UsersEntity,
-      UserRepository,
     ]),
     PassportModule,
     JwtModule.registerAsync({

@@ -9,6 +9,5 @@ export const config: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE, // db name
   // entities: ['src/**/*.entity{.ts,.js}'],
   autoLoadEntities: true,
-
-  synchronize: false,
+  synchronize: true,
 };

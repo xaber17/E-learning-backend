@@ -30,14 +30,12 @@ import {
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { UpdatePhotoDto, UpdateUserDto } from './dto/update-user.dto';
 import * as dayjs from 'dayjs';
-import { KafkaService } from 'src/kafka/kafka.service';
 
 @ApiTags('USER')
 @Controller('user')
 export class UserIdentitiesController {
   constructor(
     private readonly userService: UserIdentitiesService,
-    private readonly client: KafkaService,
   ) {}
   @ApiOperation({ summary: 'Get User Profile' })
   @ApiResponse({

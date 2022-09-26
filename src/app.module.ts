@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TerminusModule } from '@nestjs/terminus';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { OtpModule } from './otp/otp.module';
 import { Connection } from 'typeorm';
 import appConfig from './app.config';
 import { UserIdentitiesModule } from './user-identities/user-identities.module';
@@ -61,7 +60,6 @@ import { RegistrationModule } from './registration/registration.module';
     TerminusModule,
     UserIdentitiesModule,
     AuthModule,
-    OtpModule,
     ForgotPasswordModule,
     RegistrationModule,
     LoggerModule.forRootAsync({

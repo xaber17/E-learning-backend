@@ -80,4 +80,3 @@ export class RegistrationsUserEntity {
   @Column({ nullable: true, default: 'waiting_for_review' })
   status: string;
 }
-export default RegistrationsUserEntity;

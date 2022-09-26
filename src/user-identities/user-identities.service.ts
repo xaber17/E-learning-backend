@@ -17,17 +17,17 @@ import {
 } from './dto/registration-user.dto';
 import { UpdatePhotoDto, UpdateUserDto } from './dto/update-user.dto';
 import { Cache } from 'cache-manager';
-import { UserRepository } from 'src/user-identities/repositories/user-repository';
 import { isEmpty } from 'class-validator';
 
 @Injectable()
 export class UserIdentitiesService {
   constructor(
+    private readonly config: ConfigService,
     @InjectRepository(UserIdentity)
     private userIdentityRepository: Repository<UserIdentity>,
-    private usersRepository: UserRepository,
-    private readonly config: ConfigService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>,
+    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) { }
 
   async registration(registrationUserDto: RegistrationUserDto) {
@@ -56,7 +56,7 @@ export class UserIdentitiesService {
       const identitie = await this.userIdentityRepository.findOne({
         where: { reference_id: id, is_enable: true },
       });
-      const users = await this.usersRepository.findStatusActivePreregisDeceased(
+      const users = await this.userRepository.findOne(
         identitie?.reference_id ?? id,
       );
 
@@ -125,14 +125,14 @@ export class UserIdentitiesService {
       where: { reference_id: userId, is_enable: true },
     });
     if (user) {
-      const patric = await this.usersRepository.findStatusActive(
+      const patric = await this.userRepository.findOne(
         user.reference_id
       );
       if (!patric) {
         throw new NotFoundException('Data tidak ditemukan');
       }
       await this.userIdentityRepository.save(user);
-      await this.usersRepository.save(patric);
+      await this.userRepository.save(patric);
       return user;
     }
 
@@ -141,7 +141,7 @@ export class UserIdentitiesService {
 
   async updatePhoto(payload: UpdatePhotoDto) {
     let repository: Repository<UsersEntity> =
-      this.usersRepository;
+      this.userRepository;
 
     const entity = await repository.findOne({ id: payload.ref_id });
     if (entity) {

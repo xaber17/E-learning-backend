@@ -7,9 +7,9 @@ import { generateSha512 } from 'src/utility/string-util';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginActivity } from './entitites/login-activities.entity';
+import { LoginActivity } from './entities/login-activities.entity';
 import { LoginActivityDto } from './dto/login-activity.dto';
-import { UserRepository } from '../user-identities/repositories/user-repository';
+import { UsersEntity } from 'src/user-identities/entities/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,8 @@ export class AuthService {
     private userIdentityRepository: Repository<UserIdentity>,
     @InjectRepository(LoginActivity)
     private loginActivityRepository: Repository<LoginActivity>,
-    private userRepository: UserRepository,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>
   ) {}
 
   async validateUser(
@@ -34,7 +35,7 @@ export class AuthService {
 
     if (resultAuth) {
       const user =
-        await this.userRepository.findStatusActivePreregisDeceased(
+        await this.userRepository.findOne(
           resultAuth.reference_id,
         );
         

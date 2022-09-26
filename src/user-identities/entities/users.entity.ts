@@ -62,16 +62,10 @@ export class UsersEntity {
   pension_number: string;
   @Column({ nullable: true })
   phone: string;
-  // @Column({ nullable: true })
-  // category: string;
   @Column({ nullable: true })
   photo: string;
   @Column({ nullable: true })
   fullname: string;
-  // @Column({ nullable: true })
-  // pension_type: string;
-  // @Column({ nullable: true })
-  // group_level: string;
   @Column({ nullable: true })
   name_on_card: string;
   @Column({ nullable: true })
@@ -86,10 +80,6 @@ export class UsersEntity {
   is_pension: number;
   @Column({ nullable: true })
   company_id: number;
-  // @Column({ nullable: true })
-  // progress_id: number;
-  // @Column({ nullable: true })
-  // activity_id: number;
   @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;
   @CreateDateColumn({ nullable: true, type: 'timestamptz' })
@@ -103,4 +93,3 @@ export class UsersEntity {
   @Column({ nullable: true })
   is_homeclinic: string;
 }
-export default UsersEntity;

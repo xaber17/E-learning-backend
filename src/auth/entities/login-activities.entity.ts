@@ -3,7 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 @Entity({ name: 'login_activities' })
 export class LoginActivity {
   @PrimaryGeneratedColumn()
