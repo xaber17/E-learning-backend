@@ -20,9 +20,9 @@ import {
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { FcmTokenDto } from './dto/fcm-token.dto';
 import { LoginActivityDto } from './dto/login-activity.dto';
 import { AuthThrottlerGuard } from './guard/throttler.guard';
+import { AuthGuard } from '@nestjs/passport';
 // import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @ApiTags('AUTH')
@@ -57,9 +57,10 @@ export class AuthController {
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBody({ type: LoginAuthDto })
-  @UseGuards(AuthThrottlerGuard, LocalAuthGuard)
+  @UseGuards(AuthGuard('local'))
   @Post()
   async login(@Request() req) {
+    console.log(" masuk controller auth ")
     const result = await this.authService.login(req.user);
     // this.pinoLogger.info('login')
     return { message: 'Berhasil masuk', result };
@@ -107,67 +108,5 @@ export class AuthController {
     }
 
     return { message: 'Token Tidak Valid', result: { valid: false } };
-  }
-
-  @ApiOperation({ summary: 'FCM TOKEN DAN DEVICE ID API' })
-  @ApiResponse({
-    status: 200,
-    description: 'Success',
-    type: BaseResponseDto,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'User not found',
-    type: BaseResponseDto,
-  })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
-  @Get('fcm-token')
-  async getToken(@Request() req) {
-    const result = await this.authService.getToken(req.user.userId);
-    return { message: 'Success', result };
-  }
-
-  @ApiOperation({ summary: 'SAVE FCM TOKEN DAN DEVICE ID API' })
-  @ApiResponse({
-    status: 200,
-    description: 'Success',
-    type: BaseResponseDto,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'User not found',
-    type: BaseResponseDto,
-  })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
-  @Post('fcm-token')
-  async putToken(@Request() req, @Body() fcmTokenDto: FcmTokenDto) {
-    const result = await this.authService.putToken(
-      req.user.userId,
-      fcmTokenDto,
-    );
-    return { message: 'Success', result };
-  }
-
-  @ApiOperation({ summary: 'SAVE LOGIN ACTIVITY' })
-  @ApiResponse({
-    status: 200,
-    description: 'Success',
-    type: BaseResponseDto,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
-    type: BaseResponseDto,
-  })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
-  @Post('activity')
-  async putActivity(@Body() loginActivityDto: LoginActivityDto) {
-    return this.authService.postActivity(loginActivityDto);
   }
 }

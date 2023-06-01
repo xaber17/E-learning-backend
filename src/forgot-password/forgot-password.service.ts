@@ -6,20 +6,20 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { UserIdentity } from '../user-identities/entities/user-identities.entity';
 import { generateSha512 } from 'src/utility/string-util';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import axios from 'axios';
+import { UsersEntity } from 'src/user-identities/entities/users.entity';
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(
     private readonly config: ConfigService,
-    @InjectRepository(UserIdentity)
-    private userRepository: Repository<UserIdentity>,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -29,7 +29,7 @@ export class ForgotPasswordService {
     });
     if (resultForgot) {
       const otpCode = await this.cacheManager.get(
-        String(resultForgot.record_id),
+        String(resultForgot.user_id),
       );
       if (!otpCode) {
         throw new ForbiddenException('Not Allowed');
@@ -40,7 +40,7 @@ export class ForgotPasswordService {
           `${this.config.get('otpBaseUrl')}/newVerify`,
           {
             otp: otpCode,
-            record_id: resultForgot.record_id,
+            user_id: resultForgot.user_id,
           },
           { headers: { 'x-device-id': deviceId } },
         );
@@ -57,7 +57,7 @@ export class ForgotPasswordService {
         const salt = this.config.get<string>('secretKey');
         const passwordHash = generateSha512(newPassword, salt);
         const result = await this.userRepository.update(
-          resultForgot.record_id,
+          resultForgot.user_id,
           {
             password: passwordHash,
           },

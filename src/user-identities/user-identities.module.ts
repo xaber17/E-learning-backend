@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UserIdentitiesService } from './user-identities.service';
 import { UserIdentitiesController } from './user-identities.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserIdentity } from './entities/user-identities.entity';
 import { UsersEntity } from './entities/users.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
@@ -12,7 +11,6 @@ import { AuthModule } from '../auth/auth.module';
     ConfigModule,
     AuthModule,
     TypeOrmModule.forFeature([
-      UserIdentity,
       UsersEntity,
     ]),
   ],

@@ -7,11 +7,11 @@ const exampleToken =
 
 export class LoginAuthDto {
   @IsString()
-  @ApiProperty({ type: String, description: 'nomorPegawai', example: '123456' })
-  nomorPegawai: string;
+  @ApiProperty({ type: String, description: 'email', example: 'test@gmail.com' })
+  email: string;
 
   @IsNotEmpty()
-  @ApiProperty({ type: String, description: 'password', example: '13031990' })
+  @ApiProperty({ type: String, description: 'password', example: 'test123' })
   password: string;
 }
 
@@ -22,8 +22,6 @@ export class LoginDataDto {
   userId: number;
   @ApiResponseProperty({ type: String, example: 'john@mail.com' })
   email: string;
-  @ApiResponseProperty({ type: String, example: 'atoll' })
-  deviceId: string;
   @ApiResponseProperty({ type: String, example: '08224568856' })
   phoneNumber: string;
 }

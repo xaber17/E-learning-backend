@@ -18,7 +18,7 @@ import {
   RegistrationUserDto,
 } from './dto/registration-user.dto';
 import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
-import { GetUserResponseDto } from './dto/get-user.dto';
+import { GetUserResponseDto, UserDataDto } from './dto/get-user.dto';
 import {
   ApiBearerAuth,
   ApiExcludeEndpoint,
@@ -58,11 +58,31 @@ export class UserIdentitiesController {
   @UseGuards(JwtAuthGuard)
   @Get('users')
   async getProfile(@Request() req) {
-    const result = await this.userService.getProfile(req.user.userId);
+    console.log(req.user)
+    const data = await this.userService.getProfile(req.user.userId);
+    const result = plainToClass(UserDataDto, data)
+    console.log(result, 
+      "RESULT")
     return { message: 'success', result };
   }
 
-  @ApiExcludeEndpoint()
+  @ApiOperation({ summary: 'Regis New User' })
+  @ApiResponse({
+    status: 200,
+    description: 'Regis Success',
+    type: BaseResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+    type: BaseResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid userId',
+    type: BaseResponseDto,
+  })
+  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @Post('registration')
   registration(@Body() registrationUserDto: RegistrationUserDto) {
     return this.userService.registration(registrationUserDto);
@@ -94,35 +114,5 @@ export class UserIdentitiesController {
       updateUserDto,
     );
     return { message: 'Berhasil ubah data', result };
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Patch('update-photo')
-  async updatePhoto(@Body() body: UpdatePhotoDto) {
-    await this.userService.updatePhoto(body);
-
-    return { message: 'Berhasil ubah foto profil' };
-  }
-
-  @Get('get-by-login-id/:loginId')
-  async getIdentityByLoginId(@Param('loginId') loginId: string) {
-    const data = await this.userService.getIdentityByLoginId(loginId);
-    if (data) {
-      return {
-        message: 'Berhasil memuat data',
-        result: {
-          loginId: data.login_id,
-          referenceId: data.reference_id,
-          recordId: data.record_id,
-          isUser: data.is_user,
-          isEnable: data.is_enable,
-        },
-      };
-    }
-
-    return {
-      message: 'Berhasil memuat data',
-      result: null,
-    };
   }
 }

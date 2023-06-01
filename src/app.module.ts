@@ -12,8 +12,6 @@ import { ForgotPasswordModule } from './forgot-password/forgot-password.module';
 import * as redisStore from 'cache-manager-ioredis';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
-import { LoggerModule } from 'nestjs-pino';
-import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -61,16 +59,6 @@ import { RegistrationModule } from './registration/registration.module';
     UserIdentitiesModule,
     AuthModule,
     ForgotPasswordModule,
-    RegistrationModule,
-    LoggerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        return {
-          pinoHttp: { level: 'info' }
-        };
-      }
-    })
   ],
   controllers: [AppController],
   providers: [AppService],
