@@ -26,18 +26,12 @@ export class RegistrationUserDto {
   password: string;
 
   @IsString()
-  @ApiProperty({ type: String, description: 'nama peserta', default: 'Test111' })
-  name: string;
+  @ApiProperty({ type: String, description: 'Username', default: 'getarnr' })
+  username: string;
 
   @IsString()
-  @IsMobilePhone()
-  @ApiProperty({ type: String, description: 'nomor hp', default: '123456789' })
-  phone_number: string;
-
-  @IsString()
-  @IsEmail()
-  @ApiProperty({ type: String, description: 'email', default: 'test@gmail.com' })
-  email: string;
+  @ApiProperty({ type: String, description: 'Nama User', default: 'Getar Nuansa R' })
+  nama_user: string;
 
   @IsString()
   @IsOptional()
@@ -46,7 +40,7 @@ export class RegistrationUserDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional({ type: String, enum: UserRole, description: 'role', default: 'siswa' })
+  @ApiPropertyOptional({ type: String, enum: UserRole, description: 'role', default: UserRole.SISWA })
   role: UserRole;
 }
 export class RegistrationUserResponseDto extends BaseResponseDto {

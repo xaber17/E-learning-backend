@@ -26,7 +26,7 @@ export class AuthService {
   ): Promise<[AuthConstantType | null, UsersEntity | null]> {
     console.log(loginId)
     let resultAuth = await getRepository(UsersEntity).findOne({
-      where: { email: loginId },
+      where: { username: loginId },
     });
 
     console.log(resultAuth)
@@ -56,7 +56,7 @@ export class AuthService {
 
   async login(user: UsersEntity) {
     const payload = {
-      email: user.email,
+      username: user.username,
       userId: user.user_id,
       role: user.role,
     };
@@ -65,7 +65,7 @@ export class AuthService {
     return {
       token: token,
       userId: payload.userId,
-      email: payload.email,
+      username: payload.username,
       role: payload.role,
       status: user['status']
     };

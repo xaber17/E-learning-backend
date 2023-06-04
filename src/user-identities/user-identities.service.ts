@@ -14,7 +14,7 @@ import { generateSha512 } from 'src/utility/string-util';
 import {
   RegistrationUserDto,
 } from './dto/registration-user.dto';
-import { UpdatePhotoDto, UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { Cache } from 'cache-manager';
 import { isEmpty } from 'class-validator';
 
@@ -28,18 +28,18 @@ export class UserIdentitiesService {
   ) { }
 
   async registration(registrationUserDto: RegistrationUserDto) {
-    const checkEmail = await this.userRepository.findOne({
-      where: { email: registrationUserDto.email },
+    const checkUsername = await this.userRepository.findOne({
+      where: { username: registrationUserDto.username },
     });
 
-    if (checkEmail) {
-      throw new BadRequestException('Email Sudah Digunakan');
+    if (checkUsername) {
+      throw new BadRequestException('Username Sudah Digunakan');
     }
 
     try {
       const salt = this.config.get<string>('secretKey');
       const hashPassword = generateSha512(registrationUserDto.password, salt);
-      const username = registrationUserDto.email.split("@")
+      // const username = registrationUserDto.email.split("@")
 
       let regisData = Object.assign(
         new UsersEntity(),
@@ -48,9 +48,7 @@ export class UserIdentitiesService {
 
       let newuser = {
         ...regisData,
-        username: username[0],
         password: hashPassword,
-        email: registrationUserDto.email,
         status: true,
         created_by: 'admin',
       }
@@ -96,24 +94,18 @@ export class UserIdentitiesService {
   }
 
   async updateProfile(
-    userId: string,
-    { email, ...updateProfileDto }: UpdateUserDto,
+    id: string,
+    updateProfileDto : UpdateUserDto,
   ) {
     const user = await this.userRepository.findOne({
-      where: { reference_id: userId, is_enable: true },
+      where: { user_id: id },
     });
     if (user) {
-      const patric = await this.userRepository.findOne(
-        user.user_id
-      );
-      if (!patric) {
-        throw new NotFoundException('Data tidak ditemukan');
-      }
-      await this.userRepository.save(user);
-      await this.userRepository.save(patric);
-      return user;
+
+      let result = await this.userRepository.update(id, updateProfileDto)
+      return result;
     }
 
-    throw new NotFoundException('Peserta tidak ditemukan');
+    throw new NotFoundException('User tidak ditemukan');
   }
 }

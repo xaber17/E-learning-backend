@@ -6,35 +6,11 @@ import { Type, Exclude, Expose } from 'class-transformer';
 export class UserDataDto {
   @ApiResponseProperty({ type: Number, example: '123' })
   @Expose()
-  id: number;
+  user_id: number;
 
-  @ApiResponseProperty({ type: String, example: '123123' })
+  @ApiResponseProperty({ type: String, example: 'getarnr' })
   @Expose()
-  email: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  first_name: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  last_name: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  place_of_birth: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  date_of_birth: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  identity_number: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  gender: string;
+  username: string
 
   @ApiResponseProperty({ type: String, example: '123123' })
   @Expose()
@@ -42,15 +18,7 @@ export class UserDataDto {
 
   @ApiResponseProperty({ type: String, example: '123123' })
   @Expose()
-  phone: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  photo: string;
-
-  @ApiResponseProperty({ type: String, example: '123123' })
-  @Expose()
-  name: string;
+  nama_user: string;
 }
 export class GetUserResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: UserDataDto })

@@ -28,7 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { UpdatePhotoDto, UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import * as dayjs from 'dayjs';
 
 @ApiTags('USER')
@@ -83,9 +83,15 @@ export class UserIdentitiesController {
     type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
   @Post('registration')
-  registration(@Body() registrationUserDto: RegistrationUserDto) {
-    return this.userService.registration(registrationUserDto);
+  registration(@Body() registrationUserDto: RegistrationUserDto, @Request() req) {
+    console.log(req.user)
+    if (req.user.role === "admin") {
+      return this.userService.registration(registrationUserDto);
+    }
+    return { code: 401, message: "Bukan Admin" }
   }
 
   @ApiOperation({ summary: 'Update Profile User Identities' })

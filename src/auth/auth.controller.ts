@@ -102,7 +102,7 @@ export class AuthController {
         );
         return {
           message: 'Token Valid',
-          result: { valid: true, phoneNumber: identity?.phone_number },
+          result: { valid: true },
         };
       }
     }

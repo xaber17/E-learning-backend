@@ -10,7 +10,7 @@ import {
 export enum UserRole {
   ADMIN = "admin",
   GURU = "guru",
-  MHS = "mahasiswa",
+  SISWA = "siswa",
 }
 
 export enum UserStatus {
@@ -26,8 +26,8 @@ export class UsersEntity {
   @Exclude()
   password: string;
 
-  @Column({ unique: true })
-  email: string;
+  // @Column({ unique: true })
+  // email: string;
 
   @Column({ nullable: true, unique: true })
   username: string;
@@ -42,25 +42,19 @@ export class UsersEntity {
   updated_by: string;
 
   @Column({ nullable: true })
-  device_id: string;
+  nama_user: string;
 
-  @Column({ nullable: true, unique: true })
-  phone_number: string;
+  // @Column({ nullable: true })
+  // place_of_birth: string;
 
-  @Column({ nullable: true })
-  name: string;
+  // @Column({ nullable: true })
+  // date_of_birth: string;
 
-  @Column({ nullable: true })
-  place_of_birth: string;
+  // @Column({ nullable: true })
+  // gender: string;
 
-  @Column({ nullable: true })
-  date_of_birth: string;
-
-  @Column({ nullable: true })
-  gender: string;
-
-  @Column({ nullable: true })
-  photo: string;
+  // @Column({ nullable: true })
+  // photo: string;
 
   @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;

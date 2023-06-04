@@ -35,10 +35,9 @@ export class AppController {
   @Get('new-admin')
   async newAdmin() {
     const data: RegistrationUserDto = {
-      email: 'test@gmail.com',
-      phone_number: '123456789',
+      username: 'getarnr',
+      nama_user: 'Getar Nuansa R',
       status: true,
-      name: 'Admin 1',
       role: UserRole.ADMIN,
       password: 'test123'
     }

@@ -25,8 +25,8 @@ export class BaseResponseInterceptor implements NestInterceptor {
           responseId,
           deviceId,
           timestamp: new Date().toISOString(),
-          responseCode: response.statusCode,
-          responseStatus: HttpStatus[response.statusCode],
+          responseCode: data.code || response.statusCode,
+          responseStatus: HttpStatus[data.code || response.statusCode],
           responseMessage: data.message,
           data: data.result,
         };
