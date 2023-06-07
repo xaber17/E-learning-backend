@@ -86,7 +86,7 @@ export class UserIdentitiesController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post('registration')
-  registration(@Body() registrationUserDto: RegistrationUserDto, @Request() req) {
+  async registration(@Body() registrationUserDto: RegistrationUserDto, @Request() req) {
     console.log(req.user)
     if (req.user.role === "admin") {
       return this.userService.registration(registrationUserDto);

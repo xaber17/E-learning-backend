@@ -1,9 +1,4 @@
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsIn,
-  IsInt,
-  IsUrl,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -23,5 +18,9 @@ export class UpdateUserDto {
   @ApiPropertyOptional({ type: Boolean, example: true })
   @IsOptional()
   status: boolean;
+
+  @ApiPropertyOptional({ type: Number })
+  @IsOptional()
+  kelas_id: number;
 }
 

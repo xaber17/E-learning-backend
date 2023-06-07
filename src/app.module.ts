@@ -8,10 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { Connection } from 'typeorm';
 import appConfig from './app.config';
 import { UserIdentitiesModule } from './user-identities/user-identities.module';
-import { ForgotPasswordModule } from './forgot-password/forgot-password.module';
 import * as redisStore from 'cache-manager-ioredis';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
+import { KelasModule } from './kelas/kelas.module';
 
 @Module({
   imports: [
@@ -58,7 +58,7 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
     TerminusModule,
     UserIdentitiesModule,
     AuthModule,
-    ForgotPasswordModule,
+    KelasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

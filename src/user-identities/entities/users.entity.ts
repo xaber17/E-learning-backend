@@ -26,8 +26,8 @@ export class UsersEntity {
   @Exclude()
   password: string;
 
-  // @Column({ unique: true })
-  // email: string;
+  @Column({ nullable: true })
+  kelas_id: number;
 
   @Column({ nullable: true, unique: true })
   username: string;
@@ -43,18 +43,6 @@ export class UsersEntity {
 
   @Column({ nullable: true })
   nama_user: string;
-
-  // @Column({ nullable: true })
-  // place_of_birth: string;
-
-  // @Column({ nullable: true })
-  // date_of_birth: string;
-
-  // @Column({ nullable: true })
-  // gender: string;
-
-  // @Column({ nullable: true })
-  // photo: string;
 
   @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;

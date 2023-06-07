@@ -20,7 +20,6 @@ import {
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { LoginActivityDto } from './dto/login-activity.dto';
 import { AuthThrottlerGuard } from './guard/throttler.guard';
 import { AuthGuard } from '@nestjs/passport';
 // import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';

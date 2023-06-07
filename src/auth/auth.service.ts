@@ -6,8 +6,6 @@ import { generateSha512 } from 'src/utility/string-util';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginActivity } from './entities/login-activities.entity';
-import { LoginActivityDto } from './dto/login-activity.dto';
 import { UsersEntity, UserStatus } from 'src/user-identities/entities/users.entity';
 
 @Injectable()
@@ -59,6 +57,7 @@ export class AuthService {
       username: user.username,
       userId: user.user_id,
       role: user.role,
+      kelasId: user.kelas_id
     };
     console.log(payload)
     const token = this.generateToken(payload);
@@ -67,6 +66,7 @@ export class AuthService {
       userId: payload.userId,
       username: payload.username,
       role: payload.role,
+      kelas: payload.kelasId,
       status: user['status']
     };
   }

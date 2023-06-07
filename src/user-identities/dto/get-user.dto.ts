@@ -19,6 +19,10 @@ export class UserDataDto {
   @ApiResponseProperty({ type: String, example: '123123' })
   @Expose()
   nama_user: string;
+
+  @ApiResponseProperty({ type: Number, example: '123123' })
+  @Expose()
+  kelas_id: number;
 }
 export class GetUserResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: UserDataDto })
