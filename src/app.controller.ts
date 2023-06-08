@@ -15,16 +15,16 @@ import {
 import { AppService } from './app.service';
 import { ChangePasswordDto } from './auth/dto/change-password.dto';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
-import { UserRole, UserStatus } from './user-identities/entities/users.entity';
-import { UserIdentitiesService } from './user-identities/user-identities.service';
+import { UserRole, UserStatus } from './user/entities/users.entity';
+import { UserService } from './user/users.service';
 import { BaseResponseDto } from './utility/dto/base-response.dto';
-import { RegistrationUserDto } from './user-identities/dto/registration-user.dto';
+import { RegistrationUserDto } from './user/dto/registration-user.dto';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly userService: UserIdentitiesService,
+    private readonly userService: UserService,
   ) {}
 
   @Get()
@@ -39,6 +39,7 @@ export class AppController {
       nama_user: 'Getar Nuansa R',
       status: true,
       role: UserRole.ADMIN,
+      kelas_id: 0,
       password: 'test123'
     }
     const result = await this.userService.registration(data);
