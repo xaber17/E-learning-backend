@@ -8,17 +8,11 @@ import {
 @Entity({ name: 'kelass' })
 export class KelassEntity {
   @PrimaryGeneratedColumn()
+  id: number
+
+  @Column({unique: true})
   kelas_id: number;
 
-  @Column({ nullable: true })
+  @Column()
   kelas_name: string;
-
-  @Column("simple-array", { nullable: true })
-  siswa: object[];
-
-  @Column("simple-array", { nullable: true })
-  materi: object[];
-
-  @Column("simple-array", { nullable: true })
-  soal: object[];
 }

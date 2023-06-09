@@ -10,16 +10,8 @@ export class UpdateKelasDto {
   kelas_name: string
 
   @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  siswa: object[];
-
-  @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  soal: object[];
-
-  @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  materi: object[];
+  @ApiResponseProperty({ type: Number })
+  kelas_id: number;
 }
 export class UpdateKelasResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: UpdateKelasDto })

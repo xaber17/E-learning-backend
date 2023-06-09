@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UserIdentitiesService } from './user-identities.service';
-import { UserIdentitiesController } from './user-identities.controller';
+import { UserService } from './users.service';
+import { UserController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { ConfigModule } from '@nestjs/config';
@@ -17,8 +17,8 @@ import { KelassEntity } from 'src/kelas/entities/kelas.entity';
       KelassEntity
     ]),
   ],
-  controllers: [UserIdentitiesController],
-  providers: [UserIdentitiesService],
-  exports: [UserIdentitiesService],
+  controllers: [UserController],
+  providers: [UserService],
+  exports: [UserService],
 })
-export class UserIdentitiesModule {}
+export class UserModule {}

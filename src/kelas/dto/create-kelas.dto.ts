@@ -9,17 +9,8 @@ export class CreateKelasDto {
   @ApiResponseProperty({ type: String, example: 'Matematika' })
   kelas_name: string
 
-  @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  siswa: object[];
-
-  @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  soal: object[];
-
-  @IsOptional()
-  @ApiResponseProperty({ type: Array })
-  materi: object[];
+  @ApiResponseProperty({ type: Number })
+  kelas_id: number;
 }
 export class CreateKelasResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: CreateKelasDto })

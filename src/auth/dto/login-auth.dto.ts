@@ -22,8 +22,6 @@ export class LoginDataDto {
   userId: number;
   @ApiResponseProperty({ type: String, example: 'john' })
   username: string;
-  @ApiResponseProperty({ type: String, example: '08224568856' })
-  phoneNumber: string;
 }
 export class LoginAuthResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: LoginDataDto })

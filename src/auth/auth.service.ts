@@ -6,7 +6,7 @@ import { generateSha512 } from 'src/utility/string-util';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity, UserStatus } from 'src/user-identities/entities/users.entity';
+import { UsersEntity } from 'src/user/entities/users.entity';
 
 @Injectable()
 export class AuthService {

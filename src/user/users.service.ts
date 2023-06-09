@@ -20,7 +20,7 @@ import { isEmpty } from 'class-validator';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 
 @Injectable()
-export class UserIdentitiesService {
+export class UserService {
   constructor(
     private readonly config: ConfigService,
     @InjectRepository(UsersEntity)
@@ -44,6 +44,7 @@ export class UserIdentitiesService {
       const hashPassword = generateSha512(registrationUserDto.password, salt);
       // const username = registrationUserDto.email.split("@")
 
+      let request;
       let regisData = Object.assign(
         new UsersEntity(),
         registrationUserDto
@@ -56,23 +57,19 @@ export class UserIdentitiesService {
         created_by: 'admin',
       }
 
-      if (newuser.kelas_id) {
+      if (newuser.role === "admin" || newuser.role === "guru") {
+        request = await this.userRepository.save(newuser);
+      } else {
         let kelas = await this.kelasRepository.findOne({
           kelas_id: newuser.kelas_id
         })
 
         if (kelas) {
-          kelas.siswa.push({
-            user_id: newuser.user_id,
-            nama_user: newuser.nama_user,
-            role: newuser.role
-          })
+          request = await this.userRepository.save(newuser);       
         } else {
           throw new NotFoundException("Kelas Tidak Ditemukan")
         }
       }
-
-      const request = await this.userRepository.save(newuser);
 
       return request;
     } catch (e) {
@@ -123,23 +120,18 @@ export class UserIdentitiesService {
 
     if (user) {
       if (user.kelas_id !== updateProfileDto.kelas_id) {
-        let kelasBaru = await this.kelasRepository.findOne({
+        let kelas = await this.kelasRepository.findOne({
           kelas_id: updateProfileDto.kelas_id
         })
-        let kelasLama = await this.kelasRepository.findOne({
-          kelas_id: user.kelas_id
-        })
 
-        if (kelasBaru && kelasLama) {
-          let indeks = kelasLama.siswa.findIndex(siswa => {
-            siswa["user_id"] === id
-          })
-          console.log("Before ", indeks)
-          kelasLama.siswa.splice(indeks, 1)
+        if (kelas) {
+          return await this.userRepository.update(id, updateProfileDto)
+        } else {
+          throw new NotFoundException('Kelas tidak ditemukan')
         }
       }
-      let result = await this.userRepository.update(id, updateProfileDto)
-      return result;
+      
+      return await this.userRepository.update(id, updateProfileDto)
     }
 
     throw new NotFoundException('User tidak ditemukan');

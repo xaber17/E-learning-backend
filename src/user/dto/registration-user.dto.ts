@@ -42,6 +42,10 @@ export class RegistrationUserDto {
   @IsOptional()
   @ApiPropertyOptional({ type: String, enum: UserRole, description: 'role', default: UserRole.SISWA })
   role: UserRole;
+
+  @ApiPropertyOptional({ type: Number })
+  @IsOptional()
+  kelas_id: number;
 }
 export class RegistrationUserResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: RegistrationUserDto })

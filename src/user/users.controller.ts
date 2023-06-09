@@ -13,7 +13,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { UserIdentitiesService } from './user-identities.service';
+import { UserService } from './users.service';
 import {
   RegistrationUserDto,
 } from './dto/registration-user.dto';
@@ -33,9 +33,9 @@ import * as dayjs from 'dayjs';
 
 @ApiTags('USER')
 @Controller('user')
-export class UserIdentitiesController {
+export class UserController {
   constructor(
-    private readonly userService: UserIdentitiesService,
+    private readonly userService: UserService,
   ) {}
   @ApiOperation({ summary: 'Get User Profile' })
   @ApiResponse({
