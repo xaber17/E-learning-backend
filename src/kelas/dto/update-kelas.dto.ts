@@ -21,7 +21,7 @@ export class UpdateKelasDto {
   @ApiResponseProperty({ type: Array })
   materi: object[];
 }
-export class CreateKelasResponseDto extends BaseResponseDto {
+export class UpdateKelasResponseDto extends BaseResponseDto {
   @ApiResponseProperty({ type: UpdateKelasDto })
   data: UpdateKelasDto;
 }
