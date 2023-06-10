@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MateriService } from './materi.service';
-import { MateriController } from './materi.controller';
+import { SoalService } from './soal.service';
+import { SoalController } from './soal.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MaterisEntity } from './entities/materi.entity';
+import { SoalsEntity } from './entities/soal.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 
@@ -11,11 +11,11 @@ import { AuthModule } from '../auth/auth.module';
     ConfigModule,
     AuthModule,
     TypeOrmModule.forFeature([
-      MaterisEntity,
+      SoalsEntity,
     ]),
   ],
-  controllers: [MateriController],
-  providers: [MateriService],
-  exports: [MateriService],
+  controllers: [SoalController],
+  providers: [SoalService],
+  exports: [SoalService],
 })
 export class KelasModule {}

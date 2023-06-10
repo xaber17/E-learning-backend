@@ -14,7 +14,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { MateriService } from './materi.service';
+import { SoalService } from './soal.service';
 import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import {
   ApiBearerAuth,
@@ -25,16 +25,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { CreateMateriDto } from './dto/create-materi.dto';
-import { UpdateMateriDto } from './dto/update-materi.dto';
+import { CreateSoalDto } from './dto/create-soal.dto';
+import { UpdateSoalDto } from './dto/update-soal.dto';
 
-@ApiTags('MATERI')
-@Controller('materi')
-export class MateriController {
+@ApiTags('SOAL')
+@Controller('soal')
+export class SoalController {
   constructor(
-    private readonly materiService: MateriService,
+    private readonly soalService: SoalService,
   ) {}
-  @ApiOperation({ summary: 'Get Materi Profile' })
+  @ApiOperation({ summary: 'Get Soal Profile' })
   @ApiResponse({
     status: 200,
     description: 'Get Success',
@@ -47,7 +47,7 @@ export class MateriController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Invalid Materi id',
+    description: 'Invalid Soal id',
     type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
@@ -55,11 +55,11 @@ export class MateriController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getProfile(@Request() req) {
-    const result = await this.materiService.get(req.user.materiId);
+    const result = await this.soalService.get(req.user.soalId);
     return { message: 'success', result };
   }
 
-  @ApiOperation({ summary: 'New Materi' })
+  @ApiOperation({ summary: 'New Soal' })
   @ApiResponse({
     status: 200,
     description: 'Create Success',
@@ -79,14 +79,14 @@ export class MateriController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createMateriDto: CreateMateriDto, @Request() req) {
+  async create(@Body() createSoalDto: CreateSoalDto, @Request() req) {
     if (req.user.role === "admin" || "guru") {
-      return this.materiService.create(createMateriDto);
+      return this.soalService.create(createSoalDto);
     }
     return { code: 401, message: "Bukan Admin / Guru" }
   }
 
-  @ApiOperation({ summary: 'Update Materi' })
+  @ApiOperation({ summary: 'Update Soal' })
   @ApiResponse({
     status: 200,
     description: 'Berhasil ubah data',
@@ -106,11 +106,11 @@ export class MateriController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  async updateProfile(@Body() updateMateriDto: UpdateMateriDto, @Request() req) {
+  async updateProfile(@Body() updateSoalDto: UpdateSoalDto, @Request() req) {
     if (req.user.role === "admin" || "guru") {
-      let result = await this.materiService.update(
-        req.user.materiId,
-        updateMateriDto,
+      let result = await this.soalService.update(
+        req.user.soalId,
+        updateSoalDto,
       );
       return { message: 'Berhasil ubah data', result };
     }
@@ -139,7 +139,7 @@ export class MateriController {
   @Delete('delete')
   delete(@Body() body, @Request() req) {
     if (req.user.role === "admin" || "guru") {
-      return this.materiService.delete(body.materiId);
+      return this.soalService.delete(body.soalId);
     }
     return { code: 401, message: "Bukan Admin / Guru" }
   }

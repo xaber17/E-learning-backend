@@ -4,16 +4,20 @@ import { Type, Exclude, Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 
 @Exclude()
-export class UpdateKelasDto {
+export class UpdateMateriDto {
   @IsOptional()
   @ApiResponseProperty({ type: String, example: 'Matematika' })
-  kelas_name: string
+  materi_name: string
+
+  @IsOptional()
+  @ApiResponseProperty({ type: String })
+  file_id: number;
 
   @IsOptional()
   @ApiResponseProperty({ type: Number })
-  kelas_id: number;
+  tipe_materi: number;
 }
-export class UpdateKelasResponseDto extends BaseResponseDto {
-  @ApiResponseProperty({ type: UpdateKelasDto })
-  data: UpdateKelasDto;
+export class UpdateMateriResponseDto extends BaseResponseDto {
+  @ApiResponseProperty({ type: UpdateMateriDto })
+  data: UpdateMateriDto;
 }
