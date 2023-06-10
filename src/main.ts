@@ -11,6 +11,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './utility/filter/http-exception.filter';
 import { BaseResponseInterceptor } from './utility/interceptor/base-response.interceptor';
 import { ConfigService } from '@nestjs/config';
+import fmp = require('fastify-multipart');
 import { ApiEndpointGuard } from './auth/guard/api-endpoint.guard';
 
 async function bootstrap() {
@@ -19,11 +20,11 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
-      logger: true,
-      genReqId: () => uuidv4(),
+      logger: true
     }),
   );
   const appConfig = app.get(ConfigService);
+  app.register(fmp);
   app.enableCors({ origin: '*' });
   app.setGlobalPrefix(basePath);
   app.useGlobalInterceptors(new BaseResponseInterceptor());
