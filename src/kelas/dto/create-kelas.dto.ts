@@ -1,5 +1,5 @@
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
-import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
+// import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import { Type, Exclude, Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 
@@ -11,8 +11,4 @@ export class CreateKelasDto {
 
   @ApiResponseProperty({ type: Number })
   kelas_id: number;
-}
-export class CreateKelasResponseDto extends BaseResponseDto {
-  @ApiResponseProperty({ type: CreateKelasDto })
-  data: CreateKelasDto;
 }

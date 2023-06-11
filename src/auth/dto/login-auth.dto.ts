@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
-import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
+// import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 
 const exampleToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIFdpY2siLCJub21vclBlZ2F3YWkiOjEyMzQ1NiwiaWF0IjoxNjE5ODU3NjQ3LCJleHAiOjE2MTk4NTc3MDd9.7EyXCPcH5YCsmBudzeixMiR-w8VV7fosPluH1ezp4RQ';
@@ -23,7 +23,7 @@ export class LoginDataDto {
   @ApiResponseProperty({ type: String, example: 'john' })
   username: string;
 }
-export class LoginAuthResponseDto extends BaseResponseDto {
-  @ApiResponseProperty({ type: LoginDataDto })
-  data: LoginDataDto;
-}
+// export class LoginAuthResponseDto extends BaseResponseDto {
+//   @ApiResponseProperty({ type: LoginDataDto })
+//   data: LoginDataDto;
+// }

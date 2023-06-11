@@ -14,7 +14,7 @@ import {
   ApiResponseProperty,
   ApiPropertyOptional,
 } from '@nestjs/swagger';
-import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
+// import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import { UserRole } from '../entities/users.entity';
 
 export class RegistrationUserDto {
@@ -47,7 +47,7 @@ export class RegistrationUserDto {
   @IsOptional()
   kelas_id: number;
 }
-export class RegistrationUserResponseDto extends BaseResponseDto {
-  @ApiResponseProperty({ type: RegistrationUserDto })
-  data: RegistrationUserDto;
-}
+// export class RegistrationUserResponseDto extends BaseResponseDto {
+//   @ApiResponseProperty({ type: RegistrationUserDto })
+//   data: RegistrationUserDto;
+// }

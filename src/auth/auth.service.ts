@@ -1,5 +1,6 @@
-import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
-import { getRepository, Repository, In } from 'typeorm';
+import { Injectable, Inject } from '@nestjs/common';
+import { Repository, In } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { JwtService } from '@nestjs/jwt';
 import { AuthConstant, AuthConstantType } from './constant';
 import { generateSha512 } from 'src/utility/string-util';
@@ -23,16 +24,16 @@ export class AuthService {
     password: string,
   ): Promise<[AuthConstantType | null, UsersEntity | null]> {
     console.log(loginId)
-    let resultAuth = await getRepository(UsersEntity).findOne({
+    let resultAuth = await this.userRepository.findOne({
       where: { username: loginId },
     });
 
     console.log(resultAuth)
     if (resultAuth) {
       const user =
-        await this.userRepository.findOne(
-          resultAuth.user_id,
-        );
+        await this.userRepository.findOne({
+          where: { user_id: resultAuth.user_id }
+        });
         
       if (user) {
         const matched = await this.validatePassword(
@@ -73,7 +74,7 @@ export class AuthService {
 
   async logout(token: string) {
     const ttl = 24 * 3600 * 30;
-    const result = await this.cacheManager.set(token, token, { ttl: ttl });
+    const result = await this.cacheManager.set(token, token, ttl);
     return result;
   }
 
@@ -110,13 +111,5 @@ export class AuthService {
 
   generateTokenFor10Mins(payload) {
     return this.jwtService.sign(payload, { expiresIn: '10m' });
-  }
-
-  async getIdentityByUserId(id: string) {
-    const data = await this.userRepository.findOne({
-      where: { reference_id: id },
-    });
-
-    return data;
   }
 }

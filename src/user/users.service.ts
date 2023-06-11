@@ -3,11 +3,11 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  CACHE_MANAGER,
   Inject,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Not, Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { ConfigService } from '@nestjs/config';
 import { generateSha512 } from 'src/utility/string-util';
@@ -16,7 +16,7 @@ import {
 } from './dto/registration-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Cache } from 'cache-manager';
-import { isEmpty } from 'class-validator';
+// import { isEmpty } from 'class-validator';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 
 @Injectable()
@@ -61,7 +61,7 @@ export class UserService {
         request = await this.userRepository.save(newuser);
       } else {
         let kelas = await this.kelasRepository.findOne({
-          kelas_id: newuser.kelas_id
+          where: {kelas_id: newuser.kelas_id}
         })
 
         if (kelas) {
@@ -80,7 +80,7 @@ export class UserService {
   async getProfile(id: number) {
     try {
       const user = await this.userRepository.findOne({
-        user_id: id
+        where: {user_id: id}
       });
       return user
     } catch (e) {
@@ -88,12 +88,12 @@ export class UserService {
     }
   }
 
-  async changePassword(userId: string, body: any) {
+  async changePassword(userId: number, body: any) {
     const salt = this.config.get<string>('secretKey');
     const newPasswordHashed = generateSha512(body.newPassword, salt);
     const oldPasswordHashed = generateSha512(body.oldPassword, salt);
     const user = await this.userRepository.findOne({
-      where: { reference_id: userId, is_enable: true },
+      where: { user_id: userId },
     });
     if (user) {
       if (newPasswordHashed === user.password) {
@@ -111,7 +111,7 @@ export class UserService {
   }
 
   async updateProfile(
-    id: string,
+    id: number,
     updateProfileDto : UpdateUserDto,
   ) {
     const user = await this.userRepository.findOne({
@@ -121,7 +121,7 @@ export class UserService {
     if (user) {
       if (user.kelas_id !== updateProfileDto.kelas_id) {
         let kelas = await this.kelasRepository.findOne({
-          kelas_id: updateProfileDto.kelas_id
+          where: {kelas_id: updateProfileDto.kelas_id}
         })
 
         if (kelas) {

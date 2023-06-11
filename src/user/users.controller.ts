@@ -12,13 +12,13 @@ import {
   BadRequestException,
   Param,
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+// import { plainToClass } from 'class-transformer';
 import { UserService } from './users.service';
 import {
   RegistrationUserDto,
 } from './dto/registration-user.dto';
-import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
-import { GetUserResponseDto, UserDataDto } from './dto/get-user.dto';
+// import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
+import { UserDataDto } from './dto/get-user.dto';
 import {
   ApiBearerAuth,
   ApiExcludeEndpoint,
@@ -29,7 +29,8 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as dayjs from 'dayjs';
+import { UserRole } from './entities/users.entity';
+// import * as dayjs from 'dayjs';
 
 @ApiTags('USER')
 @Controller('user')
@@ -41,17 +42,14 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Login Success',
-    type: GetUserResponseDto,
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad Request',
-    type: BaseResponseDto,
+    description: 'Bad Request'
   })
   @ApiResponse({
     status: 404,
-    description: 'Invalid userId',
-    type: BaseResponseDto,
+    description: 'Invalid userId'
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -60,27 +58,23 @@ export class UserController {
   async getProfile(@Request() req) {
     console.log(req.user)
     const data = await this.userService.getProfile(req.user.userId);
-    const result = plainToClass(UserDataDto, data)
-    console.log(result, 
-      "RESULT")
-    return { message: 'success', result };
+    console.log(data, 
+      "data")
+    return { message: 'success', data };
   }
 
   @ApiOperation({ summary: 'Regis New User' })
   @ApiResponse({
     status: 200,
     description: 'Regis Success',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid userId',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -98,17 +92,14 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Berhasil ubah data',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid userId',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -120,5 +111,22 @@ export class UserController {
       updateUserDto,
     );
     return { message: 'Berhasil ubah data', result };
+  }
+
+  @Get('new-admin')
+  async newAdmin() {
+    const data: RegistrationUserDto = {
+      username: 'getarnr',
+      nama_user: 'Getar Nuansa R',
+      status: true,
+      role: UserRole.ADMIN,
+      kelas_id: 0,
+      password: 'test123'
+    }
+    const result = await this.userService.registration(data);
+    if (result) {
+      return { message: 'Berhasil membuat admin' };
+    } 
+    throw new Error("Gagal Membuat Admin Baru");
   }
 }

@@ -35,7 +35,7 @@ export class KelasService {
   async get(id: number) {
     try {
       const kelas = await this.kelasRepository.findOne({
-        kelas_id: id
+        where: {kelas_id: id}
       });
       return kelas;
     } catch (e) {
@@ -55,7 +55,7 @@ export class KelasService {
   }
 
   async update(
-    id: string,
+    id: number,
     updateKelasDto : UpdateKelasDto,
   ) {
     const kelas = await this.kelasRepository.findOne({

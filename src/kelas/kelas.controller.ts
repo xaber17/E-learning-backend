@@ -15,9 +15,8 @@ import {
   UseInterceptors,
   UploadedFile
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
 import { KelasService } from './kelas.service';
-import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
+// import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import {
   ApiBearerAuth,
   ApiExcludeEndpoint,
@@ -29,7 +28,7 @@ import {
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { CreateKelasDto } from './dto/create-kelas.dto';
 import { UpdateKelasDto } from './dto/update-kelas.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('KELAS')
 @Controller('kelas')
@@ -41,17 +40,14 @@ export class KelasController {
   @ApiResponse({
     status: 200,
     description: 'Get Success',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid kelas id',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -66,17 +62,14 @@ export class KelasController {
   @ApiResponse({
     status: 200,
     description: 'Create Success',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -93,17 +86,14 @@ export class KelasController {
   @ApiResponse({
     status: 200,
     description: 'Berhasil ubah data',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -124,17 +114,14 @@ export class KelasController {
   @ApiResponse({
     status: 200,
     description: 'Delete Success',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -151,27 +138,24 @@ export class KelasController {
   @ApiResponse({
     status: 200,
     description: 'Upload Success',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: BaseResponseDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: BaseResponseDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file'))
+  // @ApiBearerAuth('JWT')
+  // @UseGuards(JwtAuthGuard)
+  @UseInterceptors(AnyFilesInterceptor())
   @Post('upload')
-  async upload(@Request() req, @UploadedFile() file: Express.Multer.File) {
-    if (req.user.role === "admin" || "guru") {
-      console.log(file)
-    }
+  async upload(@UploadedFile() file: Array<Express.Multer.File>) {
+console.log(
+  file
+)
     return { code: 401, message: "Bukan Admin / Guru" }
   }
 }
