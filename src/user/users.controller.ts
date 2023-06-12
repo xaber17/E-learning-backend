@@ -55,10 +55,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('users')
   async getProfile(@Request() req) {
-    console.log(req.user)
     const data = await this.userService.getProfile(req.user.userId);
-    console.log(data, 
-      "data")
     return { message: 'success', data };
   }
 
@@ -79,7 +76,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Post('registration')
   async registration(@Body() registrationUserDto: RegistrationUserDto, @Request() req) {
-    console.log(req.user)
     if (req.user.role === "admin") {
       return this.userService.registration(registrationUserDto);
     }

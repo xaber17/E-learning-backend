@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/user/entities/users.entity';
+import { classToClassFromExist, instanceToInstance, plainToClass } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -23,12 +24,10 @@ export class AuthService {
     loginId: string,
     password: string,
   ): Promise<[AuthConstantType | null, UsersEntity | null]> {
-    console.log(loginId)
     let resultAuth = await this.userRepository.findOne({
       where: { username: loginId },
     });
 
-    console.log(resultAuth)
     if (resultAuth) {
       const user =
         await this.userRepository.findOne({
@@ -43,7 +42,9 @@ export class AuthService {
 
         if (matched) {
           resultAuth.status = true;
-          return [null, resultAuth];
+          let result = instanceToInstance<UsersEntity>(resultAuth)
+          console.log("Result", result)
+          return [null, result];
         }
 
         return [AuthConstant.user_not_authorized, null];
@@ -60,7 +61,6 @@ export class AuthService {
       role: user.role,
       kelasId: user.kelas_id
     };
-    console.log(payload)
     const token = this.generateToken(payload);
     return {
       token: token,

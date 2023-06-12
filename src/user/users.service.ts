@@ -5,7 +5,6 @@ import {
   BadRequestException,
   Inject,
 } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { UsersEntity } from './entities/users.entity';
@@ -15,9 +14,8 @@ import {
   RegistrationUserDto,
 } from './dto/registration-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Cache } from 'cache-manager';
-// import { isEmpty } from 'class-validator';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
+import { instanceToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -27,7 +25,6 @@ export class UserService {
     private userRepository: Repository<UsersEntity>,
     @InjectRepository(KelassEntity)
     private kelasRepository: Repository<KelassEntity>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) { }
 
   async registration(registrationUserDto: RegistrationUserDto) {
@@ -82,7 +79,8 @@ export class UserService {
       const user = await this.userRepository.findOne({
         where: {user_id: id}
       });
-      return user
+      let result = instanceToInstance<UsersEntity>(user)
+      return result
     } catch (e) {
       throw new BadRequestException(e);
     }

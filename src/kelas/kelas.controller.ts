@@ -133,29 +133,4 @@ export class KelasController {
     }
     return { code: 401, message: "Bukan Admin / Guru" }
   }
-
-  @ApiOperation({ summary: 'Upload Materi' })
-  @ApiResponse({
-    status: 200,
-    description: 'Upload Success',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Invalid',
-  })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  // @ApiBearerAuth('JWT')
-  // @UseGuards(JwtAuthGuard)
-  @UseInterceptors(AnyFilesInterceptor())
-  @Post('upload')
-  async upload(@UploadedFile() file: Array<Express.Multer.File>) {
-console.log(
-  file
-)
-    return { code: 401, message: "Bukan Admin / Guru" }
-  }
 }

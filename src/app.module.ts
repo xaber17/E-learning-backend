@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { UploadFileModule } from './upload-file/upload-file.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as redisStore from 'cache-manager-ioredis';
+// import * as redisStore from 'cache-manager-ioredis';
 import { AuthModule } from './auth/auth.module';
 import appConfig from './app.config';
 import { UserModule } from './user/users.module';
@@ -33,18 +33,9 @@ import { MateriModule } from './materi/materi.module';
         return config;
       }
     }),
-    CacheModule.registerAsync({
+    CacheModule.register({
       isGlobal: true,
-      imports: [ConfigModule],
-      useFactory: (config: ConfigService) => {
-        return {
-          store: redisStore,
-          host: config.get<string>('redisHost'),
-          port: config.get<number>('redisPort'),
-          ttl: 3600 * 24 * 30,
-        };
-      },
-      inject: [ConfigService],
+      ttl: 3600 * 24 * 30
     })
   ],
   controllers: [AppController],
