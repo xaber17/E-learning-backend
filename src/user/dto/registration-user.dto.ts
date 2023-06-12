@@ -46,6 +46,11 @@ export class RegistrationUserDto {
   @ApiPropertyOptional({ type: Number })
   @IsOptional()
   kelas_id: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({ type: String, description: 'Nomor Induk 10/16 digit' })
+  nomor_induk: string;
 }
 // export class RegistrationUserResponseDto extends BaseResponseDto {
 //   @ApiResponseProperty({ type: RegistrationUserDto })

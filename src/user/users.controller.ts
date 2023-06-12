@@ -118,6 +118,7 @@ export class UserController {
     const data: RegistrationUserDto = {
       username: 'getarnr',
       nama_user: 'Getar Nuansa R',
+      nomor_induk: '123456789123456',
       status: true,
       role: UserRole.ADMIN,
       kelas_id: 0,

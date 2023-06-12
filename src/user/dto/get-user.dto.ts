@@ -8,6 +8,10 @@ export class UserDataDto {
   @Expose()
   user_id: number;
 
+  @ApiResponseProperty({ type: String })
+  @Exclude()
+  password: string;
+
   @ApiResponseProperty({ type: String, example: 'getarnr' })
   @Expose()
   username: string

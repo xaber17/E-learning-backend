@@ -43,6 +43,9 @@ export class UsersEntity {
   @Column({ nullable: true })
   nama_user: string;
 
+  @Column({ nullable: true })
+  nomor_induk: string;
+
   @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;
 
