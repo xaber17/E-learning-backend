@@ -23,7 +23,3 @@ export class LoginDataDto {
   @ApiResponseProperty({ type: String, example: 'john' })
   username: string;
 }
-// export class LoginAuthResponseDto extends BaseResponseDto {
-//   @ApiResponseProperty({ type: LoginDataDto })
-//   data: LoginDataDto;
-// }

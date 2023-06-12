@@ -51,7 +51,6 @@ export class UserController {
     status: 404,
     description: 'Invalid userId'
   })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get('users')
@@ -76,7 +75,6 @@ export class UserController {
     status: 404,
     description: 'Invalid userId',
   })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post('registration')
@@ -101,7 +99,6 @@ export class UserController {
     status: 404,
     description: 'Invalid userId',
   })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('update-profile')

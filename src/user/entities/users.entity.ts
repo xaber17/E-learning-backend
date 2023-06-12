@@ -15,6 +15,7 @@ export enum UserRole {
 
 export enum UserStatus {
   ACTIVE = "active",
+  NOT_ACTIVE = "not active"
 }
 
 @Entity({ name: 'users' })

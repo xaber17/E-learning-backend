@@ -83,7 +83,6 @@ export class AuthService {
     if (result) {
       return false;
     }
-
     return true;
   }
 

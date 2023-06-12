@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import appConfig from './app.config';
 import { UserModule } from './user/users.module';
 import { KelasModule } from './kelas/kelas.module';
+import { SoalModule } from './soal/soal.module';
+import { MateriModule } from './materi/materi.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { KelasModule } from './kelas/kelas.module';
     AuthModule,
     UserModule,
     KelasModule,
+    SoalModule,
+    MateriModule,
     ConfigModule.forRoot({
       envFilePath: [
         '.env'

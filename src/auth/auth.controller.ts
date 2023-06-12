@@ -8,7 +8,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginAuthDto } from './dto/login-auth.dto';
+import { LoginAuthDto, LoginDataDto } from './dto/login-auth.dto';
 import {
   ApiBody,
   ApiHeader,
@@ -36,6 +36,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Login Success',
+    type: LoginDataDto
   })
   @ApiResponse({
     status: 400,
@@ -49,18 +50,17 @@ export class AuthController {
     status: 404,
     description: 'User not found',
   })
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  // @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBody({ type: LoginAuthDto })
   @UseGuards(AuthGuard('local'))
   @Post()
   async login(@Request() req) {
-    console.log(" masuk controller auth ")
     const result = await this.authService.login(req.user);
     // this.pinoLogger.info('login')
     return { message: 'Berhasil masuk', result };
   }
 
-  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  // @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get('logout')
