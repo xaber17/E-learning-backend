@@ -29,24 +29,22 @@ import { CreateSoalDto } from './dto/create-soal.dto';
 @ApiTags('SOAL')
 @Controller('soal')
 export class SoalController {
-  constructor(
-    private readonly soalService: SoalService,
-  ) {}
+  constructor(private readonly soalService: SoalService) {}
   @ApiOperation({ summary: 'Get Soal Profile' })
   @ApiResponse({
     status: 200,
     description: 'Get Success',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid Soal id',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
@@ -61,30 +59,30 @@ export class SoalController {
   @ApiResponse({
     status: 200,
     description: 'Create Success',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createSoalDto: CreateSoalDto, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       if (!createSoalDto.user_id) {
-        createSoalDto = req.user.userId
-      } 
+        createSoalDto = req.user.userId;
+      }
       return this.soalService.create(createSoalDto);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 
   // @ApiOperation({ summary: 'Update Soal' })
@@ -122,26 +120,26 @@ export class SoalController {
   @ApiResponse({
     status: 200,
     description: 'Create Success',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiResponse({
     status: 404,
     description: 'Invalid',
-    type: CreateSoalDto
+    type: CreateSoalDto,
   })
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   delete(@Body() body, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       return this.soalService.delete(body.soalId);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 }

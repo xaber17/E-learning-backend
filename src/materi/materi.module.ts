@@ -10,9 +10,7 @@ import { AuthModule } from '../auth/auth.module';
   imports: [
     ConfigModule,
     AuthModule,
-    TypeOrmModule.forFeature([
-      MaterisEntity,
-    ]),
+    TypeOrmModule.forFeature([MaterisEntity]),
   ],
   controllers: [MateriController],
   providers: [MateriService],

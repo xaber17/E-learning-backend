@@ -7,7 +7,7 @@ import { IsOptional } from 'class-validator';
 export class UpdateKelasDto {
   @IsOptional()
   @ApiResponseProperty({ type: String, example: 'Matematika' })
-  kelas_name: string
+  kelas_name: string;
 
   @IsOptional()
   @ApiResponseProperty({ type: Number })

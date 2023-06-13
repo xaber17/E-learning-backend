@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository, In } from 'typeorm';
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { AuthConstant, AuthConstantType } from './constant';
 import { generateSha512 } from 'src/utility/string-util';
@@ -8,7 +8,11 @@ import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/user/entities/users.entity';
-import { classToClassFromExist, instanceToInstance, plainToClass } from 'class-transformer';
+import {
+  classToClassFromExist,
+  instanceToInstance,
+  plainToClass,
+} from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -17,23 +21,22 @@ export class AuthService {
     private jwtService: JwtService,
     private readonly config: ConfigService,
     @InjectRepository(UsersEntity)
-    private userRepository: Repository<UsersEntity>
+    private userRepository: Repository<UsersEntity>,
   ) {}
 
   async validateUser(
     loginId: string,
     password: string,
   ): Promise<[AuthConstantType | null, UsersEntity | null]> {
-    let resultAuth = await this.userRepository.findOne({
+    const resultAuth = await this.userRepository.findOne({
       where: { username: loginId },
     });
 
     if (resultAuth) {
-      const user =
-        await this.userRepository.findOne({
-          where: { user_id: resultAuth.user_id }
-        });
-        
+      const user = await this.userRepository.findOne({
+        where: { user_id: resultAuth.user_id },
+      });
+
       if (user) {
         const matched = await this.validatePassword(
           password,
@@ -42,8 +45,8 @@ export class AuthService {
 
         if (matched) {
           resultAuth.status = true;
-          let result = instanceToInstance<UsersEntity>(resultAuth)
-          console.log("Result", result)
+          const result = instanceToInstance<UsersEntity>(resultAuth);
+          console.log('Result', result);
           return [null, result];
         }
 
@@ -59,7 +62,7 @@ export class AuthService {
       username: user.username,
       userId: user.user_id,
       role: user.role,
-      kelasId: user.kelas_id
+      kelasId: user.kelas_id,
     };
     const token = this.generateToken(payload);
     return {
@@ -68,7 +71,7 @@ export class AuthService {
       username: payload.username,
       role: payload.role,
       kelas: payload.kelasId,
-      status: user['status']
+      status: user['status'],
     };
   }
 

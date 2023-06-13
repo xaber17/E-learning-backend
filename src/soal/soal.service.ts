@@ -14,9 +14,9 @@ export class SoalService {
   constructor(
     @InjectRepository(SoalsEntity)
     private soalRepository: Repository<SoalsEntity>,
-  ) { }
+  ) {}
 
-  async create( createSoalDto: CreateSoalDto ) {
+  async create(createSoalDto: CreateSoalDto) {
     try {
       const request = await this.soalRepository.insert(createSoalDto);
       return request;
@@ -28,7 +28,7 @@ export class SoalService {
   async get(id: number) {
     try {
       const soal = await this.soalRepository.findOneBy({
-        soal_id: id
+        soal_id: id,
       });
       return soal;
     } catch (e) {
@@ -39,7 +39,7 @@ export class SoalService {
   async delete(id: number) {
     try {
       const soal = await this.soalRepository.delete({
-        soal_id: id
+        soal_id: id,
       });
       return soal;
     } catch (e) {
@@ -60,5 +60,4 @@ export class SoalService {
   //   }
   //   throw new NotFoundException('Soal tidak ditemukan');
   // }
-  
 }

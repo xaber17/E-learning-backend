@@ -20,9 +20,9 @@ export class MateriService {
   constructor(
     @InjectRepository(MaterisEntity)
     private materiRepository: Repository<MaterisEntity>,
-  ) { }
+  ) {}
 
-  async create( createMateriDto: CreateMateriDto ) {
+  async create(createMateriDto: CreateMateriDto) {
     try {
       const request = await this.materiRepository.save(createMateriDto);
       return request;
@@ -34,7 +34,7 @@ export class MateriService {
   async get(id: number) {
     try {
       const materi = await this.materiRepository.findOneBy({
-        materi_id: id
+        materi_id: id,
       });
       return materi;
     } catch (e) {
@@ -45,7 +45,7 @@ export class MateriService {
   async delete(id: number) {
     try {
       const materi = await this.materiRepository.delete({
-        materi_id: id
+        materi_id: id,
       });
       return materi;
     } catch (e) {

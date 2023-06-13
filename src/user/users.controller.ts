@@ -14,9 +14,7 @@ import {
 } from '@nestjs/common';
 // import { plainToClass } from 'class-transformer';
 import { UserService } from './users.service';
-import {
-  RegistrationUserDto,
-} from './dto/registration-user.dto';
+import { RegistrationUserDto } from './dto/registration-user.dto';
 // import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
 import { UserDataDto } from './dto/get-user.dto';
 import {
@@ -35,9 +33,7 @@ import { UserRole } from './entities/users.entity';
 @ApiTags('USER')
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
   @ApiOperation({ summary: 'Get User Profile' })
   @ApiResponse({
     status: 200,
@@ -45,11 +41,11 @@ export class UserController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad Request'
+    description: 'Bad Request',
   })
   @ApiResponse({
     status: 404,
-    description: 'Invalid userId'
+    description: 'Invalid userId',
   })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
@@ -75,11 +71,14 @@ export class UserController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post('registration')
-  async registration(@Body() registrationUserDto: RegistrationUserDto, @Request() req) {
-    if (req.user.role === "admin") {
+  async registration(
+    @Body() registrationUserDto: RegistrationUserDto,
+    @Request() req,
+  ) {
+    if (req.user.role === 'admin') {
       return this.userService.registration(registrationUserDto);
     }
-    return { code: 401, message: "Bukan Admin" }
+    return { code: 401, message: 'Bukan Admin' };
   }
 
   @ApiOperation({ summary: 'Update Profile User Identities' })
@@ -99,7 +98,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Patch('update-profile')
   async updateProfile(@Body() updateUserDto: UpdateUserDto, @Request() req) {
-    let result = await this.userService.updateProfile(
+    const result = await this.userService.updateProfile(
       req.user.userId,
       updateUserDto,
     );
@@ -115,12 +114,12 @@ export class UserController {
       status: true,
       role: UserRole.ADMIN,
       kelas_id: 0,
-      password: 'test123'
-    }
+      password: 'test123',
+    };
     const result = await this.userService.registration(data);
     if (result) {
       return { message: 'Berhasil membuat admin' };
-    } 
-    throw new Error("Gagal Membuat Admin Baru");
+    }
+    throw new Error('Gagal Membuat Admin Baru');
   }
 }

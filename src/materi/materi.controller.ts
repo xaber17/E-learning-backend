@@ -29,9 +29,7 @@ import { CreateMateriDto } from './dto/create-materi.dto';
 @ApiTags('MATERI')
 @Controller('materi')
 export class MateriController {
-  constructor(
-    private readonly materiService: MateriService,
-  ) {}
+  constructor(private readonly materiService: MateriService) {}
   @ApiOperation({ summary: 'Get Materi Profile' })
   @ApiResponse({
     status: 200,
@@ -78,10 +76,10 @@ export class MateriController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createMateriDto: CreateMateriDto, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       return this.materiService.create(createMateriDto);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 
   @ApiOperation({ summary: 'New Kelas' })
@@ -105,9 +103,9 @@ export class MateriController {
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   delete(@Body() body, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       return this.materiService.delete(body.materiId);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 }

@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'upload_files'})
+@Entity({ name: 'upload_files' })
 export class UploadFileEntity {
   @PrimaryGeneratedColumn()
-  file_id: number
+  file_id: number;
 
   @Column({ nullable: true })
   originalname: string;
@@ -23,5 +23,3 @@ export class UploadFileEntity {
   @Column()
   user_id: number;
 }
-
-

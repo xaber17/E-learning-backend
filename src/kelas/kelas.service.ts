@@ -21,9 +21,9 @@ export class KelasService {
   constructor(
     @InjectRepository(KelassEntity)
     private kelasRepository: Repository<KelassEntity>,
-  ) { }
+  ) {}
 
-  async create( createKelasDto: CreateKelasDto ) {
+  async create(createKelasDto: CreateKelasDto) {
     try {
       const request = await this.kelasRepository.save(createKelasDto);
       return request;
@@ -35,7 +35,7 @@ export class KelasService {
   async get(id: number) {
     try {
       const kelas = await this.kelasRepository.findOne({
-        where: {kelas_id: id}
+        where: { kelas_id: id },
       });
       return kelas;
     } catch (e) {
@@ -46,7 +46,7 @@ export class KelasService {
   async delete(id: number) {
     try {
       const kelas = await this.kelasRepository.delete({
-        kelas_id: id
+        kelas_id: id,
       });
       return kelas;
     } catch (e) {
@@ -54,18 +54,14 @@ export class KelasService {
     }
   }
 
-  async update(
-    id: number,
-    updateKelasDto : UpdateKelasDto,
-  ) {
+  async update(id: number, updateKelasDto: UpdateKelasDto) {
     const kelas = await this.kelasRepository.findOne({
       where: { kelas_id: id },
     });
     if (kelas) {
-      let result = await this.kelasRepository.update(id, updateKelasDto)
+      const result = await this.kelasRepository.update(id, updateKelasDto);
       return result;
     }
     throw new NotFoundException('Kelas tidak ditemukan');
   }
-  
 }

@@ -1,14 +1,10 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum SoalType {
-  UJIAN = "ujian",
-  QUIZ = "quiz"
+  UJIAN = 'ujian',
+  QUIZ = 'quiz',
 }
 
 @Entity({ name: 'soals' })
@@ -26,14 +22,14 @@ export class SoalsEntity {
   file_id: number;
 
   @ApiResponseProperty({ enum: SoalType, example: SoalType.QUIZ })
-  @Column({ type: "enum", enum: SoalType })
+  @Column({ type: 'enum', enum: SoalType })
   tipe_soal: SoalType;
 
   @ApiResponseProperty({ type: Number, example: 12 })
   @Column()
-  user_id: number
+  user_id: number;
 
   @ApiResponseProperty({ type: Number, example: 2 })
   @Column()
-  kelas_id: number
+  kelas_id: number;
 }

@@ -12,10 +12,7 @@ import { KelassEntity } from 'src/kelas/entities/kelas.entity';
   imports: [
     ConfigModule,
     AuthModule,
-    TypeOrmModule.forFeature([
-      UsersEntity,
-      KelassEntity
-    ]),
+    TypeOrmModule.forFeature([UsersEntity, KelassEntity]),
   ],
   controllers: [UserController],
   providers: [UserService],

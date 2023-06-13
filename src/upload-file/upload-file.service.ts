@@ -17,45 +17,45 @@ export class UploadFileService {
     @InjectRepository(MaterisEntity)
     private materiRepository: Repository<MaterisEntity>,
     @InjectRepository(SoalsEntity)
-    private soalRepository: Repository<SoalsEntity>
-  ) { }
+    private soalRepository: Repository<SoalsEntity>,
+  ) {}
 
   async create(file, data, type) {
     const checkKelas = await this.kelasRepository.findOneBy({
-     kelas_id: data.kelas_id 
-    })
+      kelas_id: data.kelas_id,
+    });
 
     if (checkKelas) {
-      let dataFile: UploadFileEntity = {
+      const dataFile: UploadFileEntity = {
         ...file,
         filename: data.filename,
         kelas_id: data.kelas_id,
-        user_id: data.user_id
-      }
+        user_id: data.user_id,
+      };
 
       let result;
       const resultFile = await this.uploadFileRepository.save(dataFile);
       if (type === 'materi') {
-        let materi = {
+        const materi = {
           materi_name: data.filename,
           file_id: resultFile.file_id,
           kelas_id: resultFile.kelas_id,
-          user_id: resultFile.user_id
-        }
-        result = await this.materiRepository.save(materi)
+          user_id: resultFile.user_id,
+        };
+        result = await this.materiRepository.save(materi);
       } else {
-        let soal = {
+        const soal = {
           soal_name: data.filename,
           file_id: resultFile.file_id,
           kelas_id: resultFile.kelas_id,
           user_id: resultFile.user_id,
-          tipe_soal: data.tipe
-        }
-        result = await this.soalRepository.save(soal)
+          tipe_soal: data.tipe,
+        };
+        result = await this.soalRepository.save(soal);
       }
       return { result };
     } else {
-      throw new NotFoundException("Kelas tidak ada")
+      throw new NotFoundException('Kelas tidak ada');
     }
   }
 

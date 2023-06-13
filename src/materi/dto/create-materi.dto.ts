@@ -6,7 +6,7 @@ import { IsOptional } from 'class-validator';
 export class CreateMateriDto {
   @IsOptional()
   @ApiResponseProperty({ type: String, example: 'Matematika' })
-  materi_name: string
+  materi_name: string;
 
   @IsOptional()
   @ApiResponseProperty({ type: Number })

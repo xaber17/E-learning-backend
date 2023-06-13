@@ -14,7 +14,7 @@ export class UserDataDto {
 
   @ApiResponseProperty({ type: String, example: 'getarnr' })
   @Expose()
-  username: string
+  username: string;
 
   @ApiResponseProperty({ type: String, example: '123123' })
   @Expose()

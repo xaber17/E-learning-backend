@@ -7,13 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    ConfigModule,
-    AuthModule,
-    TypeOrmModule.forFeature([
-      KelassEntity,
-    ]),
-  ],
+  imports: [ConfigModule, AuthModule, TypeOrmModule.forFeature([KelassEntity])],
   controllers: [KelasController],
   providers: [KelasService],
   exports: [KelasService],

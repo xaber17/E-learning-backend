@@ -12,9 +12,7 @@ import { UsersEntity } from 'src/user/entities/users.entity';
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([
-      UsersEntity,
-    ]),
+    TypeOrmModule.forFeature([UsersEntity]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

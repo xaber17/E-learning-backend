@@ -7,7 +7,7 @@ import {
   MinLength,
   IsAlphanumeric,
   Matches,
-  IsEmail
+  IsEmail,
 } from 'class-validator';
 import {
   ApiProperty,
@@ -30,7 +30,11 @@ export class RegistrationUserDto {
   username: string;
 
   @IsString()
-  @ApiProperty({ type: String, description: 'Nama User', default: 'Getar Nuansa R' })
+  @ApiProperty({
+    type: String,
+    description: 'Nama User',
+    default: 'Getar Nuansa R',
+  })
   nama_user: string;
 
   @IsString()
@@ -40,7 +44,12 @@ export class RegistrationUserDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional({ type: String, enum: UserRole, description: 'role', default: UserRole.SISWA })
+  @ApiPropertyOptional({
+    type: String,
+    enum: UserRole,
+    description: 'role',
+    default: UserRole.SISWA,
+  })
   role: UserRole;
 
   @ApiPropertyOptional({ type: Number })

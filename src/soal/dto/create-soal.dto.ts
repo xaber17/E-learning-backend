@@ -7,7 +7,7 @@ import { SoalType } from '../entities/soal.entity';
 export class CreateSoalDto {
   @IsOptional()
   @ApiResponseProperty({ type: String, example: 'Matematika' })
-  soal_name: string
+  soal_name: string;
 
   @IsOptional()
   @ApiResponseProperty({ type: Number })

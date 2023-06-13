@@ -1,10 +1,6 @@
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'materis' })
 export class MaterisEntity {
@@ -19,12 +15,12 @@ export class MaterisEntity {
   @ApiResponseProperty({ type: Number, example: 52 })
   @Column({ nullable: true })
   file_id: number;
-  
+
   @ApiResponseProperty({ type: Number, example: 1 })
   @Column()
-  user_id: number
+  user_id: number;
 
   @ApiResponseProperty({ type: Number, example: 2 })
   @Column()
-  kelas_id: number
+  kelas_id: number;
 }

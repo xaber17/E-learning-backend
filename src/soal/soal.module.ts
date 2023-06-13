@@ -7,13 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    ConfigModule,
-    AuthModule,
-    TypeOrmModule.forFeature([
-      SoalsEntity,
-    ]),
-  ],
+  imports: [ConfigModule, AuthModule, TypeOrmModule.forFeature([SoalsEntity])],
   controllers: [SoalController],
   providers: [SoalService],
   exports: [SoalService],

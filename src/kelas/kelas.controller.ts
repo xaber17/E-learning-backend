@@ -13,7 +13,7 @@ import {
   Param,
   Delete,
   UseInterceptors,
-  UploadedFile
+  UploadedFile,
 } from '@nestjs/common';
 import { KelasService } from './kelas.service';
 // import { BaseResponseDto } from 'src/utility/dto/base-response.dto';
@@ -33,9 +33,7 @@ import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('KELAS')
 @Controller('kelas')
 export class KelasController {
-  constructor(
-    private readonly kelasService: KelasService,
-  ) {}
+  constructor(private readonly kelasService: KelasService) {}
   @ApiOperation({ summary: 'Get Kelas Data' })
   @ApiResponse({
     status: 200,
@@ -76,10 +74,10 @@ export class KelasController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createKelasDto: CreateKelasDto, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       return this.kelasService.create(createKelasDto);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 
   @ApiOperation({ summary: 'Update Kelas' })
@@ -100,14 +98,14 @@ export class KelasController {
   @UseGuards(JwtAuthGuard)
   @Patch('update')
   async updateProfile(@Body() updateKelasDto: UpdateKelasDto, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
-      let result = await this.kelasService.update(
+    if (req.user.role === 'admin' || 'guru') {
+      const result = await this.kelasService.update(
         req.user.kelasId,
         updateKelasDto,
       );
       return { message: 'Berhasil ubah data', result };
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 
   @ApiOperation({ summary: 'Delete Kelas' })
@@ -128,9 +126,9 @@ export class KelasController {
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   async delete(@Body() body, @Request() req) {
-    if (req.user.role === "admin" || "guru") {
+    if (req.user.role === 'admin' || 'guru') {
       return this.kelasService.delete(body.kelasId);
     }
-    return { code: 401, message: "Bukan Admin / Guru" }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 }

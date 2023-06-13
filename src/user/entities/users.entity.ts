@@ -9,14 +9,14 @@ import {
 } from 'typeorm';
 
 export enum UserRole {
-  ADMIN = "admin",
-  GURU = "guru",
-  SISWA = "siswa",
+  ADMIN = 'admin',
+  GURU = 'guru',
+  SISWA = 'siswa',
 }
 
 export enum UserStatus {
-  ACTIVE = "active",
-  NOT_ACTIVE = "not active"
+  ACTIVE = 'active',
+  NOT_ACTIVE = 'not active',
 }
 
 @Entity({ name: 'users' })
@@ -54,7 +54,7 @@ export class UsersEntity {
 
   @UpdateDateColumn({ nullable: true, type: 'timestamptz' })
   updated_at: Date;
-  
-  @Column({ type: "enum", enum: UserRole })
+
+  @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 }

@@ -27,16 +27,14 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
-    // @InjectPinoLogger(AuthController.name)
-    // private readonly pinoLogger: PinoLogger,
-    ) {}
+    private readonly authService: AuthService, // @InjectPinoLogger(AuthController.name) // private readonly pinoLogger: PinoLogger,
+  ) {}
 
   @ApiOperation({ summary: 'Authentication login' })
   @ApiResponse({
     status: 200,
     description: 'Login Success',
-    type: LoginDataDto
+    type: LoginDataDto,
   })
   @ApiResponse({
     status: 400,

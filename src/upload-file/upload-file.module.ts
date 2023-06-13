@@ -17,10 +17,10 @@ import { SoalsEntity } from 'src/soal/entities/soal.entity';
       UploadFileEntity,
       KelassEntity,
       MaterisEntity,
-      SoalsEntity
+      SoalsEntity,
     ]),
   ],
   controllers: [UploadFileController],
-  providers: [UploadFileService]
+  providers: [UploadFileService],
 })
 export class UploadFileModule {}
