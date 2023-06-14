@@ -66,12 +66,8 @@ export class AuthService {
     };
     const token = this.generateToken(payload);
     return {
-      token: token,
-      userId: payload.userId,
-      username: payload.username,
-      role: payload.role,
-      kelas: payload.kelasId,
-      status: user['status'],
+      accessToken: token,
+      user,
     };
   }
 

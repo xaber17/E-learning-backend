@@ -51,8 +51,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('users')
   async getProfile(@Request() req) {
-    const data = await this.userService.getProfile(req.user.userId);
-    return { message: 'success', data };
+    const user = await this.userService.getProfile(req.user.userId);
+    return { message: 'success', user };
   }
 
   @ApiOperation({ summary: 'Regis New User' })

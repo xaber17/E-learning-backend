@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { BaseResponseInterceptor } from './utility/interceptor/base-response.interceptor';
 
 async function bootstrap() {
-  const PORT = 3000;
+  const PORT = 3002;
   const basePath = 'api';
   const docsPath = '/api-docs';
   const app = await NestFactory.create(AppModule, {
@@ -12,6 +12,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix(basePath);
+  app.enableCors();
   // app.useGlobalInterceptors(new BaseResponseInterceptor())
   const config = new DocumentBuilder()
     .setTitle('E-Learning Service')

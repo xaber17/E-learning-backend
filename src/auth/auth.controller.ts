@@ -53,9 +53,13 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post()
   async login(@Request() req) {
-    const result = await this.authService.login(req.user);
+    console.log(' Hit Login ', req.user);
+    const data = await this.authService.login(req.user);
+    const accessToken = data.accessToken;
+    const user = data.user;
+    delete data.accessToken;
     // this.pinoLogger.info('login')
-    return { message: 'Berhasil masuk', result };
+    return { message: 'Berhasil masuk', accessToken, user };
   }
 
   // @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
@@ -64,41 +68,31 @@ export class AuthController {
   @Get('logout')
   async logout(@Headers() header) {
     const prefix = 'Bearer ';
-    let token: string = header.authorization;
-    if (token.startsWith(prefix)) {
-      token = token.slice(prefix.length);
+    let accessToken: string = header.authorization;
+    if (accessToken.startsWith(prefix)) {
+      accessToken = accessToken.slice(prefix.length);
     }
-    const result = await this.authService.logout(token);
+    const result = await this.authService.logout(accessToken);
     return { message: 'Berhasil Keluar', result };
   }
-
-  // @ApiOperation({ summary: 'Check JWT Expires' })
-  // @ApiResponse({ type: BaseResponseDto, status: 200 })
-  // @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
-  // @ApiBearerAuth('JWT')
-  // @UseGuards(JwtAuthGuard)
-  // @Get('validate-token')
-  // async validateToken(@Headers() header, @Request() req) {
-  //   let token: string | undefined = header.authorization;
-  //   if (token) {
-  //     const prefix = 'Bearer ';
-  //     if (token.startsWith(prefix)) {
-  //       token = token.slice(prefix.length);
-  //     }
-  //     const verify = this.authService.verifyJwt(token);
-  //     const isNotSameWithPrevToken =
-  //       await this.authService.compareWithPreviousToken(token);
-  //     if (verify && isNotSameWithPrevToken) {
-  //       const identity = await this.authService.getIdentityByUserId(
-  //         req.user.userId,
-  //       );
-  //       return {
-  //         message: 'Token Valid',
-  //         result: { valid: true },
-  //       };
-  //     }
-  //   }
-
-  //   return { message: 'Token Tidak Valid', result: { valid: false } };
-  // }
 }
+// Example Response
+// {
+//   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ODY0YzcxNy01ODdkLTQ3MmEtOTI5YS04ZTVmMjk4MDI0ZGEtMCIsImlhdCI6MTY4Njc0NTUyOSwiZXhwIjoxNjg3MDA0NzI5fQ.s6-LyRuKllTcwVyV1JfrjJVfYUULQksYxc9uwUOJr7k",
+//   "user": {
+//       "id": "8864c717-587d-472a-929a-8e5f298024da-0",
+//       "displayName": "Jaydon Frankie",
+//       "email": "demo@minimals.cc",
+//       "password": "demo1234",
+//       "photoURL": "https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_default.jpg",
+//       "phoneNumber": "+40 777666555",
+//       "country": "United States",
+//       "address": "90210 Broadway Blvd",
+//       "state": "California",
+//       "city": "San Francisco",
+//       "zipCode": "94116",
+//       "about": "Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.",
+//       "role": "admin",
+//       "isPublic": true
+//   }
+// }
