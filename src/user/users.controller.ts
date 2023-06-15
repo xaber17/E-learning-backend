@@ -34,7 +34,7 @@ import { UserRole } from './entities/users.entity';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @ApiOperation({ summary: 'Get User Profile' })
+  @ApiOperation({ summary: 'Get Current User Profile' })
   @ApiResponse({
     status: 200,
     description: 'Login Success',
@@ -49,7 +49,7 @@ export class UserController {
   })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
-  @Get('users')
+  @Get()
   async getProfile(@Request() req) {
     const user = await this.userService.getProfile(req.user.userId);
     return { message: 'success', user };
@@ -108,7 +108,7 @@ export class UserController {
   @Get('new-admin')
   async newAdmin() {
     const data: RegistrationUserDto = {
-      username: 'getarnr',
+      username: 'admin',
       nama_user: 'Getar Nuansa R',
       nomor_induk: '123456789123456',
       status: true,
@@ -118,8 +118,32 @@ export class UserController {
     };
     const result = await this.userService.registration(data);
     if (result) {
-      return { message: 'Berhasil membuat admin' };
+      return { message: 'Berhasil membuat admin', result };
     }
     throw new Error('Gagal Membuat Admin Baru');
+  }
+
+  @ApiOperation({ summary: 'Get User Profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login Success',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid userId',
+  })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Get('users')
+  async getAllUser(@Request() req) {
+    if (req.user.role === 'admin') {
+      const data = this.userService.getAllUser();
+      return data;
+    }
+    return { code: 401, message: 'Bukan Admin' };
   }
 }

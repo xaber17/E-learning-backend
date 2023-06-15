@@ -127,7 +127,7 @@ export class KelasController {
   @Delete('delete')
   async delete(@Body() body, @Request() req) {
     if (req.user.role === 'admin' || 'guru') {
-      return this.kelasService.delete(body.kelasId);
+      return this.kelasService.delete(body.kelas_id);
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
   }

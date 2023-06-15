@@ -81,6 +81,16 @@ export class UserService {
     }
   }
 
+  async getAllUser() {
+    try {
+      const user = await this.userRepository.find();
+      console.log(user);
+      return user;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
   async changePassword(userId: number, body: any) {
     const salt = this.config.get<string>('secretKey');
     const newPasswordHashed = generateSha512(body.newPassword, salt);
