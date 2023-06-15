@@ -7,7 +7,7 @@ import { generateSha512 } from 'src/utility/string-util';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from 'src/user/entities/users.entity';
+import { UserRole, UsersEntity } from 'src/user/entities/users.entity';
 import {
   classToClassFromExist,
   instanceToInstance,
@@ -58,6 +58,7 @@ export class AuthService {
   }
 
   async login(user: UsersEntity) {
+    let guru, siswa;
     const payload = {
       username: user.username,
       userId: user.user_id,
@@ -65,9 +66,20 @@ export class AuthService {
       kelasId: user.kelas_id,
     };
     const token = this.generateToken(payload);
+    console.log(user.role === UserRole.ADMIN);
+    if (user.role === UserRole.ADMIN) {
+      guru = await this.userRepository.find({
+        where: { role: UserRole.GURU },
+      });
+      siswa = await this.userRepository.find({
+        where: { role: UserRole.SISWA },
+      });
+    }
     return {
       accessToken: token,
       user,
+      guru,
+      siswa,
     };
   }
 

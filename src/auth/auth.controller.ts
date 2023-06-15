@@ -57,9 +57,13 @@ export class AuthController {
     const data = await this.authService.login(req.user);
     const accessToken = data.accessToken;
     const user = data.user;
+    const allUser = {
+      guru: data.guru,
+      siswa: data.siswa,
+    };
     delete data.accessToken;
     // this.pinoLogger.info('login')
-    return { message: 'Berhasil masuk', accessToken, user };
+    return { message: 'Berhasil masuk', accessToken, user, allUser };
   }
 
   // @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })

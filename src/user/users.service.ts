@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
-import { UsersEntity } from './entities/users.entity';
+import { UserRole, UsersEntity } from './entities/users.entity';
 import { ConfigService } from '@nestjs/config';
 import { generateSha512 } from 'src/utility/string-util';
 import { RegistrationUserDto } from './dto/registration-user.dto';
@@ -69,13 +69,27 @@ export class UserService {
     }
   }
 
-  async getProfile(id: number) {
+  async getProfile(id: number, role: string) {
     try {
-      const user = await this.userRepository.findOne({
+      let guru, siswa;
+      const result = await this.userRepository.findOne({
         where: { user_id: id },
       });
-      const result = instanceToInstance<UsersEntity>(user);
-      return result;
+      if (role === UserRole.ADMIN) {
+        guru = await this.userRepository.find({
+          where: { role: UserRole.GURU },
+        });
+        siswa = await this.userRepository.find({
+          where: { role: UserRole.SISWA },
+        });
+      }
+      const user = instanceToInstance<UsersEntity>(result);
+      const data = {
+        user,
+        guru,
+        siswa,
+      };
+      return data;
     } catch (e) {
       throw new BadRequestException(e);
     }
