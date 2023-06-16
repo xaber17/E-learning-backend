@@ -147,6 +147,12 @@ export class UserService {
     if (updateProfileDto.status) {
       updateProfileDto.status = (updateProfileDto.status.toString() == 'true')
     }
+    if (updateProfileDto.password) {
+      const salt = this.config.get<string>('secretKey');
+      const newPasswordHashed = generateSha512(updateProfileDto.password, salt);
+      updateProfileDto.password = newPasswordHashed;
+    }
+    
     const user = await this.userRepository.findOne({
       where: { user_id: id },
     });
