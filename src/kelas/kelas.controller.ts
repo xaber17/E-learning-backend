@@ -53,7 +53,7 @@ export class KelasController {
   @Get('all')
   async getAllKelas(@Request() req) {
     if (req.user.role === 'admin' || 'guru') {
-      const result = await this.kelasService.get(req.user.kelasId);
+      const result = await this.kelasService.getAll();
       return { message: 'success', result };
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
@@ -100,6 +100,7 @@ export class KelasController {
   @Post()
   async create(@Body() createKelasDto: CreateKelasDto, @Request() req) {
     if (req.user.role === 'admin' || 'guru') {
+      console.log('Masuk Controller Create Kelas: ', createKelasDto)
       return this.kelasService.create(createKelasDto);
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
@@ -121,11 +122,11 @@ export class KelasController {
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
-  @Patch('update')
-  async updateKelas(@Body() updateKelasDto: UpdateKelasDto, @Request() req) {
+  @Patch('update/:kelasId')
+  async updateKelas(@Body() updateKelasDto: UpdateKelasDto, @Request() req, @Param() param) {
     if (req.user.role === 'admin' || 'guru') {
       const result = await this.kelasService.update(
-        req.user.kelasId,
+        param.kelasId,
         updateKelasDto,
       );
       return { message: 'Berhasil ubah data', result };

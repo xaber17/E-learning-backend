@@ -9,4 +9,7 @@ export class KelassEntity {
 
   @Column()
   kelas_name: string;
+
+  @Column({ nullable: true })
+  deskripsi: string;
 }

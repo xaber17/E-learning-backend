@@ -43,7 +43,7 @@ export class KelasService {
     }
   }
 
-  async getAll(id: number) {
+  async getAll() {
     try {
       const kelas = await this.kelasRepository.find();
       return kelas;

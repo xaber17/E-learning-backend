@@ -8,4 +8,8 @@ export class CreateKelasDto {
   @IsOptional()
   @ApiResponseProperty({ type: String, example: 'Matematika' })
   kelas_name: string;
+
+  @IsOptional()
+  @ApiResponseProperty({ type: String, example: 'Ini Pelajaran Matematika yang susah' })
+  deskripsi: string;
 }
