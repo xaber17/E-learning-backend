@@ -11,6 +11,7 @@ import {
   Request,
   BadRequestException,
   Param,
+  Delete,
 } from '@nestjs/common';
 // import { plainToClass } from 'class-transformer';
 import { UserService } from './users.service';
@@ -28,6 +29,7 @@ import {
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRole } from './entities/users.entity';
+import { plainToClass } from 'class-transformer';
 // import * as dayjs from 'dayjs';
 
 @ApiTags('USER')
@@ -108,6 +110,34 @@ export class UserController {
     return { message: 'Berhasil ubah data', result };
   }
 
+  @ApiOperation({ summary: 'Update Profile User Identities' })
+  @ApiResponse({
+    status: 200,
+    description: 'Berhasil ubah data',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid userId',
+  })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Patch('update/:userId')
+  async updateOtherUser(@Body() updateUserDto: UpdateUserDto, @Request() req, @Param() param) {
+    if (req.user.role === 'admin') {
+      const result = await this.userService.updateProfile(
+        param.userId,
+        updateUserDto,
+      );
+      return { message: 'Berhasil ubah data', result };
+    }
+    return { code: 401, message: 'Bukan Admin' };
+  }
+    
+
   @Get('new-admin')
   async newAdmin() {
     const data: RegistrationUserDto = {
@@ -143,10 +173,35 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('users')
   async getAllUser(@Request() req) {
+    console.log(req.user)
     if (req.user.role === 'admin') {
       const data = this.userService.getAllUser();
       return data;
     }
     return { code: 401, message: 'Bukan Admin' };
+  }
+
+  @ApiOperation({ summary: 'Delete User' })
+  @ApiResponse({
+    status: 200,
+    description: 'Delete Success',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid',
+  })
+  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Delete('delete/:userId')
+  async delete(@Request() req, @Param() param) {
+    if (req.user.role === 'admin' || 'guru') {
+      return this.userService.delete(param.userId);
+    }
+    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 }

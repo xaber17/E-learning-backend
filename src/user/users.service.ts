@@ -3,10 +3,11 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  HttpException,
   Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { DataSource, Not, Repository } from 'typeorm';
 import { UserRole, UsersEntity } from './entities/users.entity';
 import { ConfigService } from '@nestjs/config';
 import { generateSha512 } from 'src/utility/string-util';
@@ -23,7 +24,8 @@ export class UserService {
     private userRepository: Repository<UsersEntity>,
     @InjectRepository(KelassEntity)
     private kelasRepository: Repository<KelassEntity>,
-  ) {}
+    private dataSource: DataSource
+  ) { }
 
   async registration(registrationUserDto: RegistrationUserDto) {
     const checkUsername = await this.userRepository.findOne({
@@ -58,8 +60,13 @@ export class UserService {
 
         if (kelas) {
           request = await this.userRepository.save(newuser);
+          const kelas = await this.kelasRepository.findOne({
+            where: { kelas_id: newuser.kelas_id }
+          })
+          console.log('Data kelas registration: ', kelas)
         } else {
-          throw new NotFoundException('Kelas Tidak Ditemukan');
+          console.log('Error di registration');
+          throw new NotFoundException('Kelas tidak ditemukan');
         }
       }
 
@@ -97,8 +104,17 @@ export class UserService {
 
   async getAllUser() {
     try {
+      // const query = createQueryBuilder(UsersEntity, 'user')
+      // .leftJoin
       const user = await this.userRepository.find();
-      console.log(user);
+      for (let index = 0; index < user.length; index++) {
+        if (user[index].kelas_id != 0) {
+          const kelas = await this.kelasRepository.findOne({
+            where: { kelas_id: user[index].kelas_id }
+          })
+          user[index]['kelas_name'] = kelas.kelas_name
+        }
+      }
       return user;
     } catch (e) {
       throw new BadRequestException(e);
@@ -128,26 +144,26 @@ export class UserService {
   }
 
   async updateProfile(id: number, updateProfileDto: UpdateUserDto) {
+    updateProfileDto.status = (updateProfileDto.status.toString() == 'true')
     const user = await this.userRepository.findOne({
       where: { user_id: id },
     });
 
     if (user) {
-      if (user.kelas_id !== updateProfileDto.kelas_id) {
-        const kelas = await this.kelasRepository.findOne({
-          where: { kelas_id: updateProfileDto.kelas_id },
-        });
-
-        if (kelas) {
-          return await this.userRepository.update(id, updateProfileDto);
-        } else {
-          throw new NotFoundException('Kelas tidak ditemukan');
-        }
-      }
-
       return await this.userRepository.update(id, updateProfileDto);
+    } else {
+      throw new NotFoundException('Kelas tidak ditemukan');
     }
+  }
 
-    throw new NotFoundException('User tidak ditemukan');
+  async delete(id: number) {
+    try {
+      const user = await this.userRepository.delete({
+        user_id: id,
+      });
+      return user;
+    } catch (e) {
+      throw new NotFoundException(e);
+    }
   }
 }

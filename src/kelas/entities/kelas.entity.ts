@@ -1,12 +1,10 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { UsersEntity } from 'src/user/entities/users.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'kelass' })
 export class KelassEntity {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ unique: true })
   kelas_id: number;
 
   @Column()

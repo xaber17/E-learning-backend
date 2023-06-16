@@ -34,6 +34,31 @@ import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 @Controller('kelas')
 export class KelasController {
   constructor(private readonly kelasService: KelasService) {}
+  @ApiOperation({ summary: 'Get All Kelas Data' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get Success',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid kelas id',
+  })
+  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Get('all')
+  async getAllKelas(@Request() req) {
+    if (req.user.role === 'admin' || 'guru') {
+      const result = await this.kelasService.get(req.user.kelasId);
+      return { message: 'success', result };
+    }
+    return { code: 401, message: 'Bukan Admin / Guru' };
+  }
+
   @ApiOperation({ summary: 'Get Kelas Data' })
   @ApiResponse({
     status: 200,
@@ -51,7 +76,7 @@ export class KelasController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getProfile(@Request() req) {
+  async getKelas(@Request() req) {
     const result = await this.kelasService.get(req.user.kelasId);
     return { message: 'success', result };
   }
@@ -97,7 +122,7 @@ export class KelasController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  async updateProfile(@Body() updateKelasDto: UpdateKelasDto, @Request() req) {
+  async updateKelas(@Body() updateKelasDto: UpdateKelasDto, @Request() req) {
     if (req.user.role === 'admin' || 'guru') {
       const result = await this.kelasService.update(
         req.user.kelasId,
@@ -124,10 +149,10 @@ export class KelasController {
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
-  @Delete('delete')
-  async delete(@Body() body, @Request() req) {
+  @Delete('delete/:userId')
+  async delete(@Request() req, @Param() param) {
     if (req.user.role === 'admin' || 'guru') {
-      return this.kelasService.delete(body.kelas_id);
+      return this.kelasService.delete(param.userId);
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
   }

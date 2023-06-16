@@ -1,11 +1,14 @@
 // import { Exclude } from 'class-transformer';
 import { Exclude } from 'class-transformer';
+import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 export enum UserRole {
@@ -28,14 +31,14 @@ export class UsersEntity {
   @Exclude()
   password: string;
 
-  @Column({ nullable: true })
-  kelas_id: number;
-
   @Column({ nullable: true, unique: true })
   username: string;
 
   @Column({ default: true })
   status: boolean;
+
+  @Column({ nullable: true })
+  kelas_id: number;
 
   @Column({ nullable: true })
   created_by: string;

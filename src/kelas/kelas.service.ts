@@ -43,6 +43,15 @@ export class KelasService {
     }
   }
 
+  async getAll(id: number) {
+    try {
+      const kelas = await this.kelasRepository.find();
+      return kelas;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
   async delete(id: number) {
     try {
       const kelas = await this.kelasRepository.delete({
