@@ -112,7 +112,11 @@ export class UserService {
           const kelas = await this.kelasRepository.findOne({
             where: { kelas_id: user[index].kelas_id }
           })
-          user[index]['kelas_name'] = kelas.kelas_name
+          if (kelas) {
+            user[index]['kelas_name'] = kelas.kelas_name
+          } else {
+            user[index]['kelas_name'] = 'Kelas Belum ada'
+          }
         }
       }
       return user;
