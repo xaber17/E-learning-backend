@@ -143,6 +143,21 @@ export class UserService {
     throw new NotFoundException('User not found');
   }
 
+  async updateOtherProfile(id: number, updateProfileDto: UpdateUserDto) {
+    if (updateProfileDto.status) {
+      updateProfileDto.status = (updateProfileDto.status.toString() == 'true')
+    }
+    const user = await this.userRepository.findOne({
+      where: { user_id: id },
+    });
+
+    if (user) {
+      return await this.userRepository.update(id, updateProfileDto);
+    } else {
+      throw new NotFoundException('Kelas tidak ditemukan');
+    }
+  }
+
   async updateProfile(id: number, updateProfileDto: UpdateUserDto) {
     updateProfileDto.status = (updateProfileDto.status.toString() == 'true')
     const user = await this.userRepository.findOne({

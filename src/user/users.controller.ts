@@ -128,7 +128,8 @@ export class UserController {
   @Patch('update/:userId')
   async updateOtherUser(@Body() updateUserDto: UpdateUserDto, @Request() req, @Param() param) {
     if (req.user.role === 'admin') {
-      const result = await this.userService.updateProfile(
+      console.log('Masuk Controller Update User Lain: ', param.userId, updateUserDto)
+      const result = await this.userService.updateOtherProfile(
         param.userId,
         updateUserDto,
       );

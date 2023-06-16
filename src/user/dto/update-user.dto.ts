@@ -19,4 +19,8 @@ export class UpdateUserDto {
   @ApiPropertyOptional({ type: Number })
   @IsOptional()
   kelas_id: number;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  password: string;
 }
