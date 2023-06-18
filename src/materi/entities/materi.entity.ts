@@ -23,4 +23,8 @@ export class MaterisEntity {
   @ApiResponseProperty({ type: Number, example: 2 })
   @Column()
   kelas_id: number;
+
+  @ApiResponseProperty({ type: String, example: 'Avada Kedavra' })
+  @Column()
+  deskripsi: string;
 }

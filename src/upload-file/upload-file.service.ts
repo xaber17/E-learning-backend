@@ -31,16 +31,18 @@ export class UploadFileService {
         filename: data.filename,
         kelas_id: data.kelas_id,
         user_id: data.user_id,
+        deskripsi: data.deskripsi,
       };
 
       let result;
       const resultFile = await this.uploadFileRepository.save(dataFile);
       if (type === 'materi') {
         const materi = {
-          materi_name: data.filename,
+          materi_name: resultFile.filename,
           file_id: resultFile.file_id,
           kelas_id: resultFile.kelas_id,
           user_id: resultFile.user_id,
+          deskripsi: resultFile.deskripsi,
         };
         result = await this.materiRepository.save(materi);
       } else {
@@ -59,8 +61,14 @@ export class UploadFileService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} uploadFile`;
+  async findOne(id: number) {
+    const materi = await this.materiRepository.findOne({
+      where: { materi_id: id}
+    })
+    const dataFile = await this.uploadFileRepository.findOne({
+      where: { file_id: materi.file_id}
+    })
+    return dataFile;
   }
 
   remove(id: number) {

@@ -22,4 +22,7 @@ export class UploadFileEntity {
 
   @Column()
   user_id: number;
+
+  @Column({ nullable: true })
+  deskripsi: string;
 }

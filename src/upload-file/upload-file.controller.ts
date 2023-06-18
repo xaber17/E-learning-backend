@@ -79,10 +79,12 @@ export class UploadFileController {
     @Body() body,
     @Request() req,
   ) {
+    console.log("Isi Data Materi: ", body, file)
     const data = {
       kelas_id: body.kelas_id,
+      deskripsi: body.deskripsi,
       user_id: req.user.userId,
-      filename: body.name,
+      filename: body.materi_name,
     };
     return this.uploadFileService.create(file, data, 'materi');
   }
@@ -128,6 +130,7 @@ export class UploadFileController {
     @Body() body,
     @Request() req,
   ) {
+    console.log("Isi data Soal: ", body)
     const data = {
       kelas_id: body.kelas_id,
       user_id: req.user.userId,
@@ -139,10 +142,13 @@ export class UploadFileController {
 
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
-  @Get('get')
-  find(): StreamableFile {
+  @Get(':materiId')
+  async find(@Param() param): Promise<StreamableFile> {
+    console.log(param.materiId)
+    const data = await this.uploadFileService.findOne(param.materiId)
+    console.log('data file', data)
     const file = createReadStream(
-      join(process.cwd(), `./uploaded-file/Lembar Pengesahan PKL 1.pdf`),
+      join(process.cwd(), `./uploaded-file/${data.originalname}`),
     );
     return new StreamableFile(file);
   }

@@ -54,6 +54,7 @@ export class KelasController {
   async getAllKelas(@Request() req) {
     if (req.user.role === 'admin' || 'guru') {
       const result = await this.kelasService.getAll();
+      console.log(result)
       return { message: 'success', result };
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
@@ -150,10 +151,10 @@ export class KelasController {
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
-  @Delete('delete/:userId')
+  @Delete('delete/:kelasId')
   async delete(@Request() req, @Param() param) {
     if (req.user.role === 'admin' || 'guru') {
-      return this.kelasService.delete(param.userId);
+      return this.kelasService.delete(param.kelasId);
     }
     return { code: 401, message: 'Bukan Admin / Guru' };
   }
