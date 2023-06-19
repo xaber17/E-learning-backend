@@ -1,6 +1,6 @@
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 @Entity({ name: 'materis' })
 export class MaterisEntity {
@@ -25,6 +25,9 @@ export class MaterisEntity {
   kelas_id: number;
 
   @ApiResponseProperty({ type: String, example: 'Avada Kedavra' })
-  @Column()
+  @Column({ nullable: true })
   deskripsi: string;
+
+  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
+  created_at: Date;
 }

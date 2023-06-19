@@ -50,7 +50,9 @@ export class MateriService {
 
   async getAll() {
     try {
-      const materi = await this.materiRepository.find();
+      const materi = await this.materiRepository.find({
+        order: { created_at: 'DESC' }
+      });
       for (let index = 0; index < materi.length; index++) {
         if (materi[index].kelas_id != 0) {
           const user =  await this.userRepository.findOne({

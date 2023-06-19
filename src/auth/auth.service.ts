@@ -67,7 +67,7 @@ export class AuthService {
     };
     const token = this.generateToken(payload);
     console.log(user.role === UserRole.ADMIN);
-    if (user.role === UserRole.ADMIN) {
+    if (user.role === UserRole.ADMIN || user.role === UserRole.GURU) {
       guru = await this.userRepository.find({
         where: { role: UserRole.GURU },
       });

@@ -1,6 +1,6 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 export enum SoalType {
   UJIAN = 'ujian',
@@ -32,4 +32,10 @@ export class SoalsEntity {
   @ApiResponseProperty({ type: Number, example: 2 })
   @Column()
   kelas_id: number;
+
+  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
+  created_at: Date;
+
+  @Column({ nullable: true, type:'timestamptz'})
+  deadline: Date;
 }
