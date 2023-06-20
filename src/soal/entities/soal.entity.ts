@@ -3,8 +3,8 @@ import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 export enum SoalType {
-  UJIAN = 'ujian',
-  QUIZ = 'quiz',
+  UJIAN = 'Ujian',
+  KUIS = 'Kuis',
 }
 
 @Entity({ name: 'soals' })
@@ -21,8 +21,8 @@ export class SoalsEntity {
   @Column({ nullable: true })
   file_id: number;
 
-  @ApiResponseProperty({ enum: SoalType, example: SoalType.QUIZ })
-  @Column({ type: 'enum', enum: SoalType })
+  @ApiResponseProperty({ enum: SoalType, example: SoalType.KUIS })
+  @Column({ type: 'enum', enum: SoalType, nullable: true })
   tipe_soal: SoalType;
 
   @ApiResponseProperty({ type: Number, example: 12 })
@@ -33,9 +33,13 @@ export class SoalsEntity {
   @Column()
   kelas_id: number;
 
-  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
+  @CreateDateColumn({ nullable: true, type: 'timestamp' })
   created_at: Date;
 
-  @Column({ nullable: true, type:'timestamptz'})
+  @Column({ nullable: true, type: 'timestamp' })
   deadline: Date;
+
+  @ApiResponseProperty({ type: String, example: 'Lores ipmnum' })
+  @Column({ nullable: true })
+  pertanyaan: string;
 }

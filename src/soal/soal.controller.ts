@@ -49,6 +49,32 @@ export class SoalController {
   @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
+  @Get('all')
+  async getAllSoal(@Request() req) {
+    const result = await this.soalService.getAll();
+    console.log("Data Get All Soal: ", result)
+    return { message: 'success', result };
+  }
+
+  @ApiOperation({ summary: 'Get Soal Data' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get Success',
+    type: CreateSoalDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+    type: CreateSoalDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid Soal id',
+    type: CreateSoalDto,
+  })
+  @ApiHeader({ name: 'x-device-id', description: 'Android or iOS device id' })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getSoal(@Request() req) {
     const result = await this.soalService.get(req.user.soalId);

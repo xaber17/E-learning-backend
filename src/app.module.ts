@@ -12,6 +12,7 @@ import { UserModule } from './user/users.module';
 import { KelasModule } from './kelas/kelas.module';
 import { SoalModule } from './soal/soal.module';
 import { MateriModule } from './materi/materi.module';
+import { JawabanModule } from './jawaban/jawaban.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MateriModule } from './materi/materi.module';
       isGlobal: true,
       ttl: 3600 * 24 * 30,
     }),
+    JawabanModule,
   ],
   controllers: [AppController],
   providers: [AppService],
