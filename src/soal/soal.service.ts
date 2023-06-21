@@ -37,7 +37,7 @@ export class SoalService {
         const guru =  await this.userRepository.findOne({
           where: { user_id: soal[index].user_id }
         })
-        
+
         if (guru) {
           soal[index]['guru_name'] = guru.nama_user
         } else {
@@ -55,7 +55,7 @@ export class SoalService {
             soal[index]['kelas_name'] = '-'
           }
         }
-        soal[index]['deadlines'] = soal[index].deadline.toDateString()
+        soal[index]['deadlines'] = soal[index]?.deadline?.toDateString()
       }
 
       return soal;

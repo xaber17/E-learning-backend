@@ -3,16 +3,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  CACHE_MANAGER,
-  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MaterisEntity } from './entities/materi.entity';
-import { ConfigService } from '@nestjs/config';
-import { generateSha512 } from 'src/utility/string-util';
-import { Cache } from 'cache-manager';
-import { isEmpty } from 'class-validator';
 import { CreateMateriDto } from './dto/create-materi.dto';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { UsersEntity } from 'src/user/entities/users.entity';

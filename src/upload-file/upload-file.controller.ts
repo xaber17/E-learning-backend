@@ -130,11 +130,12 @@ export class UploadFileController {
     @Body() body,
     @Request() req,
   ) {
-    console.log("Isi data Soal: ", body)
     const data = {
       kelas_id: body.kelas_id,
       user_id: req.user.userId,
-      filename: body.name,
+      filename: file.filename,
+      soal_name: body.soal_name,
+      deadline: new Date(body.deadline),
       tipe: body.tipe_soal || null,
     };
     return this.uploadFileService.create(file, data, 'soal');

@@ -24,6 +24,7 @@ export class UploadFileService {
     const checkKelas = await this.kelasRepository.findOneBy({
       kelas_id: data.kelas_id,
     });
+    console.log("data file: ", data, file)
 
     if (checkKelas) {
       const dataFile: UploadFileEntity = {
@@ -31,7 +32,7 @@ export class UploadFileService {
         filename: data.filename,
         kelas_id: data.kelas_id,
         user_id: data.user_id,
-        deskripsi: data.deskripsi,
+        deskripsi: data.deskripsi || '',
       };
 
       let result;
@@ -47,11 +48,12 @@ export class UploadFileService {
         result = await this.materiRepository.save(materi);
       } else {
         const soal = {
-          soal_name: data.filename,
+          soal_name: data.soal_name,
           file_id: resultFile.file_id,
           kelas_id: resultFile.kelas_id,
           user_id: resultFile.user_id,
           tipe_soal: data.tipe,
+          deadline: data.deadline
         };
         result = await this.soalRepository.save(soal);
       }
