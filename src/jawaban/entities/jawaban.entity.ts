@@ -4,7 +4,6 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'jawabans' })
 export class Jawaban {
-  @ApiResponseProperty({ type: Number, example: 12 })
   @PrimaryGeneratedColumn()
   jawaban_id: number;
 
