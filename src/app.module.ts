@@ -22,6 +22,7 @@ import { JawabanModule } from './jawaban/jawaban.module';
     KelasModule,
     SoalModule,
     MateriModule,
+    JawabanModule,
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       load: [appConfig],
@@ -36,7 +37,6 @@ import { JawabanModule } from './jawaban/jawaban.module';
       isGlobal: true,
       ttl: 3600 * 24 * 30,
     }),
-    JawabanModule,
   ],
   controllers: [AppController],
   providers: [AppService],

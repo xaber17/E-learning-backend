@@ -48,22 +48,31 @@ export class MateriService {
     }
   }
 
-  async getAll() {
+  async getAll(user) {
+    let materi;
     try {
-      const materi = await this.materiRepository.find({
-        order: { created_at: 'DESC' }
-      });
+      if (user.role === 'siswa') {
+        materi = await this.materiRepository.find({
+          where: {kelas_id: user.kelasId},
+          order: { created_at: 'DESC' }
+        });
+      } else {
+        materi = await this.materiRepository.find({
+          order: { created_at: 'DESC' }
+        });
+      }
+      
       for (let index = 0; index < materi.length; index++) {
         if (materi[index].kelas_id != 0) {
-          const user =  await this.userRepository.findOne({
+          const guru =  await this.userRepository.findOne({
             where: { user_id: materi[index].user_id }
           })
           const kelas = await this.kelasRepository.findOne({
             where: { kelas_id: materi[index].kelas_id }
           })
 
-          if (user) {
-            materi[index]['user_name'] = user.nama_user
+          if (guru) {
+            materi[index]['user_name'] = guru.nama_user
           } else {
             materi[index]['user_name'] = 'By Admin'
           }

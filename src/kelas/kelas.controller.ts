@@ -52,12 +52,9 @@ export class KelasController {
   @UseGuards(JwtAuthGuard)
   @Get('all')
   async getAllKelas(@Request() req) {
-    if (req.user.role === 'admin' || 'guru') {
-      const result = await this.kelasService.getAll();
+      const result = await this.kelasService.getAll(req.user);
       console.log(result)
       return { message: 'success', result };
-    }
-    return { code: 401, message: 'Bukan Admin / Guru' };
   }
 
   @ApiOperation({ summary: 'Get Kelas Data' })
