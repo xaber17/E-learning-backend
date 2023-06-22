@@ -141,6 +141,39 @@ export class UploadFileController {
     return this.uploadFileService.create(file, data, 'soal');
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('jawaban')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploaded-file',
+        filename: (req, file, cb) => {
+          cb(null, `${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  async asyncuploadJawaban(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 100000 }),
+          new FileTypeValidator({ fileType: 'pdf' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() body,
+    @Request() req,
+  ) {
+    const data = {
+      soal_id: body.soal_id,
+      user_id: req.user.userId,
+      filename: file.filename,
+    };
+    return this.uploadFileService.create(file, data, 'jawaban');
+  }
+
   @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get(':materiId')

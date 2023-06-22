@@ -27,8 +27,9 @@ export class JawabanController {
     return this.jawabanService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJawabanDto: UpdateJawabanDto) {
+  async update(@Param('id') id: string, @Body() updateJawabanDto: UpdateJawabanDto) {
     return this.jawabanService.update(+id, updateJawabanDto);
   }
 

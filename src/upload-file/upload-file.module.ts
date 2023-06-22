@@ -8,6 +8,7 @@ import { UploadFileEntity } from './entities/upload-file.entity';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { MaterisEntity } from 'src/materi/entities/materi.entity';
 import { SoalsEntity } from 'src/soal/entities/soal.entity';
+import { Jawaban } from 'src/jawaban/entities/jawaban.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SoalsEntity } from 'src/soal/entities/soal.entity';
       KelassEntity,
       MaterisEntity,
       SoalsEntity,
+      Jawaban
     ]),
   ],
   controllers: [UploadFileController],

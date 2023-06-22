@@ -17,5 +17,5 @@ export class Jawaban {
   nilai: number;
 
   @Column()
-  file_id: string;
+  file_id: number;
 }

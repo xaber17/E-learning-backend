@@ -38,8 +38,9 @@ export class JawabanService {
     return `This action returns a #${id} jawaban`;
   }
 
-  update(id: number, updateJawabanDto: UpdateJawabanDto) {
-    return `This action updates a #${id} jawaban`;
+  async update(id: number, updateJawabanDto: UpdateJawabanDto) {
+    const result = await this.jawabanRepository.update(id, updateJawabanDto)
+    return result;
   }
 
   remove(id: number) {

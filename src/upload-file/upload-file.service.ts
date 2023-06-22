@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { MaterisEntity } from 'src/materi/entities/materi.entity';
 import { SoalsEntity } from 'src/soal/entities/soal.entity';
+import { Jawaban } from 'src/jawaban/entities/jawaban.entity';
 
 @Injectable()
 export class UploadFileService {
@@ -18,6 +19,8 @@ export class UploadFileService {
     private materiRepository: Repository<MaterisEntity>,
     @InjectRepository(SoalsEntity)
     private soalRepository: Repository<SoalsEntity>,
+    @InjectRepository(Jawaban)
+    private jawabanRepository: Repository<Jawaban>,
   ) {}
 
   async create(file, data, type) {
@@ -46,7 +49,7 @@ export class UploadFileService {
           deskripsi: resultFile.deskripsi,
         };
         result = await this.materiRepository.save(materi);
-      } else {
+      } else if (type === 'soal') {
         const soal = {
           soal_name: data.soal_name,
           file_id: resultFile.file_id,
@@ -56,7 +59,14 @@ export class UploadFileService {
           deadline: data.deadline
         };
         result = await this.soalRepository.save(soal);
-      }
+      } else if (type === 'jawaban') {
+        const jawaban = {
+          file_id: resultFile.file_id,
+          user_id: resultFile.user_id,
+          soal_id: data.soal_id
+        };
+        result = await this.jawabanRepository.save(jawaban);
+      } 
       return { result };
     } else {
       throw new NotFoundException('Kelas tidak ada');

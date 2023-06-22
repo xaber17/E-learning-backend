@@ -8,5 +8,5 @@ export class CreateJawabanDto {
   @IsOptional()
   nilai: number;
 
-  file_id: string;
+  file_id: number;
 }
