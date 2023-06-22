@@ -166,7 +166,9 @@ export class UploadFileController {
     @Body() body,
     @Request() req,
   ) {
+    console.log("User: ", req.user)
     const data = {
+      kelas_id: req.user.kelasId || 1,
       soal_id: body.soal_id,
       user_id: req.user.userId,
       filename: file.filename,
