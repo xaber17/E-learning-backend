@@ -3,16 +3,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  CACHE_MANAGER,
-  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MaterisEntity } from './entities/materi.entity';
-import { ConfigService } from '@nestjs/config';
-import { generateSha512 } from 'src/utility/string-util';
-import { Cache } from 'cache-manager';
-import { isEmpty } from 'class-validator';
 import { CreateMateriDto } from './dto/create-materi.dto';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { UsersEntity } from 'src/user/entities/users.entity';
@@ -48,22 +42,31 @@ export class MateriService {
     }
   }
 
-  async getAll() {
+  async getAll(user) {
+    let materi;
     try {
-      const materi = await this.materiRepository.find({
-        order: { created_at: 'DESC' }
-      });
+      if (user.role === 'siswa') {
+        materi = await this.materiRepository.find({
+          where: {kelas_id: user.kelasId},
+          order: { created_at: 'DESC' }
+        });
+      } else {
+        materi = await this.materiRepository.find({
+          order: { created_at: 'DESC' }
+        });
+      }
+      
       for (let index = 0; index < materi.length; index++) {
         if (materi[index].kelas_id != 0) {
-          const user =  await this.userRepository.findOne({
+          const guru =  await this.userRepository.findOne({
             where: { user_id: materi[index].user_id }
           })
           const kelas = await this.kelasRepository.findOne({
             where: { kelas_id: materi[index].kelas_id }
           })
 
-          if (user) {
-            materi[index]['user_name'] = user.nama_user
+          if (guru) {
+            materi[index]['user_name'] = guru.nama_user
           } else {
             materi[index]['user_name'] = 'By Admin'
           }

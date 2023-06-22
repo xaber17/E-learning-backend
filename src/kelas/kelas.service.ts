@@ -43,9 +43,17 @@ export class KelasService {
     }
   }
 
-  async getAll() {
+  async getAll(user) {
+    let kelas;
     try {
-      const kelas = await this.kelasRepository.find();
+      if (user.role === 'siswa') {
+        kelas = await this.kelasRepository.find({
+          where: { kelas_id: user.kelasId}
+        });
+      } else {
+        kelas = await this.kelasRepository.find();
+      }
+
       return kelas;
     } catch (e) {
       throw new BadRequestException(e);

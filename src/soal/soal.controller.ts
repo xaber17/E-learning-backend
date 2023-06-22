@@ -51,7 +51,9 @@ export class SoalController {
   @UseGuards(JwtAuthGuard)
   @Get('all')
   async getAllSoal(@Request() req) {
-    const result = await this.soalService.getAll();
+    console.log('Usernya: ', req.user)
+    const result = await this.soalService.getAll(req.user);
+   
     console.log("Data Get All Soal: ", result)
     return { message: 'success', result };
   }

@@ -51,7 +51,7 @@ export class MateriController {
   @UseGuards(JwtAuthGuard)
   @Get('all')
   async getAllMateri(@Request() req) {
-    const result = await this.materiService.getAll();
+    const result = await this.materiService.getAll(req.user);
     console.log(result)
     return { message: 'success', result };
   }

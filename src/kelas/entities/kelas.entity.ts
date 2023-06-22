@@ -11,4 +11,7 @@ export class KelassEntity {
 
   @Column({ nullable: true })
   deskripsi: string;
+
+  @Column({ nullable: true})
+  link: string;
 }
