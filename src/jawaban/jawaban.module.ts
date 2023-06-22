@@ -7,9 +7,10 @@ import { SoalsEntity } from 'src/soal/entities/soal.entity';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { Jawaban } from './entities/jawaban.entity';
 import { UsersEntity } from 'src/user/entities/users.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [ConfigModule, TypeOrmModule.forFeature([SoalsEntity, KelassEntity, Jawaban, UsersEntity])],
+  imports: [ConfigModule, AuthModule, TypeOrmModule.forFeature([SoalsEntity, KelassEntity, Jawaban, UsersEntity])],
   controllers: [JawabanController],
   providers: [JawabanService],
   exports: [JawabanService],
