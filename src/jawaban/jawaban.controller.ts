@@ -1,20 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { JawabanService } from './jawaban.service';
 import { CreateJawabanDto } from './dto/create-jawaban.dto';
 import { UpdateJawabanDto } from './dto/update-jawaban.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard'
 
 @Controller('jawaban')
 export class JawabanController {
   constructor(private readonly jawabanService: JawabanService) {}
 
   @Post()
-  create(@Body() createJawabanDto: CreateJawabanDto) {
+  async create(@Body() createJawabanDto: CreateJawabanDto, @Request() req) {
+    createJawabanDto.user_id = req.user.userId
     return this.jawabanService.create(createJawabanDto);
   }
 
-  @Get()
-  findAll() {
-    return this.jawabanService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Post('all')
+  async findAll(@Request() req, @Body() body) {
+    const result = await this.jawabanService.findAll(body.soalId);
+    console.log("Data Get All Soal: ", result)
+    return { message: 'success', result };
   }
 
   @Get(':id')

@@ -1,15 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJawabanDto } from './dto/create-jawaban.dto';
 import { UpdateJawabanDto } from './dto/update-jawaban.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SoalsEntity } from 'src/soal/entities/soal.entity';
+import { KelassEntity } from 'src/kelas/entities/kelas.entity';
+import { Jawaban } from './entities/jawaban.entity';
 
 @Injectable()
 export class JawabanService {
-  create(createJawabanDto: CreateJawabanDto) {
-    return 'This action adds a new jawaban';
+  constructor(
+    @InjectRepository(Jawaban)
+    private jawabanRepository: Repository<Jawaban>,
+    @InjectRepository(SoalsEntity)
+    private soalRepository: Repository<SoalsEntity>,
+    @InjectRepository(KelassEntity)
+    private kelasRepository: Repository<KelassEntity>,
+  ) {}
+  
+  async create(createJawabanDto: CreateJawabanDto) {
+    try {
+      const request = await this.jawabanRepository.insert(createJawabanDto);
+      return request;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  findAll() {
-    return `This action returns all jawaban`;
+  async findAll(soal_id: number) {
+    const jawaban = await this.jawabanRepository.find({
+      where: { soal_id: soal_id }
+    });
+    return jawaban;
   }
 
   findOne(id: number) {
