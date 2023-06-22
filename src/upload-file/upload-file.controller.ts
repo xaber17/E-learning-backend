@@ -130,15 +130,27 @@ export class UploadFileController {
     @Body() body,
     @Request() req,
   ) {
-    const data = {
-      kelas_id: body.kelas_id,
-      user_id: req.user.userId,
-      filename: file.filename,
-      soal_name: body.soal_name,
-      deadline: new Date(body.deadline),
-      tipe: body.tipe_soal || null,
-    };
-    return this.uploadFileService.create(file, data, 'soal');
+    let data;
+    if (req.user.role === 'siswa') {
+      data = {
+        kelas_id: req.user.kelasId || 1,
+        soal_id: body.soal_id,
+        user_id: req.user.userId,
+        filename: file.filename,
+      };
+      console.log('Jawaban: ', data)
+      return this.uploadFileService.create(file, data, 'jawaban');
+    } else {
+      data = {
+        kelas_id: body.kelas_id,
+        user_id: req.user.userId,
+        filename: file.filename,
+        soal_name: body.soal_name,
+        deadline: new Date(body.deadline),
+        tipe: body.tipe_soal || null,
+      };
+      return this.uploadFileService.create(file, data, 'soal');
+    }
   }
 
   @UseGuards(JwtAuthGuard)

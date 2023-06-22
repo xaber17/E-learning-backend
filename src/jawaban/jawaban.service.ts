@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { SoalsEntity } from 'src/soal/entities/soal.entity';
 import { KelassEntity } from 'src/kelas/entities/kelas.entity';
 import { Jawaban } from './entities/jawaban.entity';
+import { UsersEntity } from 'src/user/entities/users.entity';
 
 @Injectable()
 export class JawabanService {
@@ -16,6 +17,8 @@ export class JawabanService {
     private soalRepository: Repository<SoalsEntity>,
     @InjectRepository(KelassEntity)
     private kelasRepository: Repository<KelassEntity>,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>,
   ) {}
   
   async create(createJawabanDto: CreateJawabanDto) {
@@ -31,6 +34,12 @@ export class JawabanService {
     const jawaban = await this.jawabanRepository.find({
       where: { soal_id: soal_id }
     });
+    for (let index = 0; index < jawaban.length; index++) {
+      const siswa =  await this.userRepository.findOne({
+        where: { user_id: jawaban[index].user_id }
+      })
+      jawaban[index]['siswa_name'] = siswa.nama_user
+    }
     return jawaban;
   }
 
